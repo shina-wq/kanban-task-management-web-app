@@ -7,8 +7,6 @@ export type IconName =
   | 'chevron-up'
   | 'cross'
   | 'ellipsis'
-  | 'eye'
-  | 'eye-slash'
   | 'grip'
   | 'logo-mark'
   | 'logout'

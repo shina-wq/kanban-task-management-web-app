@@ -1,12 +1,5 @@
 <app-header class="header" />
-
-@if (!sidebarHidden()) {
-  <app-sidebar class="sidebar" (hide)="sidebarHidden.set(true)" />
-} @else {
-  <button type="button" class="show-sidebar" aria-label="Show sidebar" (click)="sidebarHidden.set(false)">
-    <app-icon name="eye" />
-  </button>
-}
+<app-sidebar class="sidebar" />
 
 <main class="main">
   <router-outlet />

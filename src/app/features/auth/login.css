@@ -46,10 +46,6 @@
   margin-top: 0.5rem;
 }
 
-.theme {
-  width: min(100%, 15rem);
-}
-
 @media (min-width: 768px) {
   .card {
     padding: 2.5rem 2rem;

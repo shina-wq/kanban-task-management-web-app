@@ -12,6 +12,7 @@ import { Router } from '@angular/router';
 import { HasUnsavedChanges } from '../../../core/guards/unsaved-changes.guard';
 import { TaskDraft } from '../../../core/models/board.model';
 import { BoardService } from '../../../core/services/board.service';
+import { ToastService } from '../../../core/services/toast.service';
 import { createId } from '../../../core/utils/id';
 import { Icon } from '../../../shared/icon/icon';
 import { Modal } from '../../../shared/modal/modal';
@@ -36,6 +37,7 @@ interface SubtaskRow {
 export class TaskForm implements OnInit, HasUnsavedChanges {
   private readonly boardService = inject(BoardService);
   private readonly router = inject(Router);
+  private readonly toast = inject(ToastService);
   private readonly form = viewChild.required(NgForm);
 
   // Route params. `taskId` is undefined when adding a new task.
@@ -98,8 +100,10 @@ export class TaskForm implements OnInit, HasUnsavedChanges {
     const taskId = this.taskId();
     if (taskId) {
       this.boardService.updateTask(this.boardId(), taskId, draft);
+      this.toast.success('Task updated');
     } else {
       this.boardService.createTask(this.boardId(), draft);
+      this.toast.success('Task created');
     }
 
     // Programmatic navigation back to the board, keeping any ?search= term.

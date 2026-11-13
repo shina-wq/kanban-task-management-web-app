@@ -5,7 +5,7 @@ Goal: **excellent but simple** code using modern Angular.
 
 ## Decisions
 
-- [x] Design: full Frontend Mentor Kanban design (light/dark, hide sidebar, responsive)
+- [x] Design: full Frontend Mentor Kanban design (light/dark, responsive); sidebar always visible (no hide/show)
 - [x] Extra screens in the same style: Boards overview, Settings, Login, Not Found
 - [x] Every modal is a route (deep-linkable, browser Back closes it)
 - [x] Modern Angular: standalone components, signals, `@if`/`@for`, `inject()`, functional guards, `OnPush`
@@ -26,7 +26,7 @@ Goal: **excellent but simple** code using modern Angular.
 | Lifecycle hooks | `ngOnInit`, `DestroyRef` / `ngOnDestroy`, `afterNextRender` |
 | Change detection | `OnPush` everywhere, signals + `computed()` |
 | Services & DI | `BoardService`, `ThemeService`, `AuthService` via `inject()` |
-| Routing | Lazy loading, child routes, params, query params, guards, preloading, aux route |
+| Routing | Lazy loading, child routes, params, query params, guards, preloading (aux routes discussed in README) |
 
 ## Route map
 
@@ -54,7 +54,7 @@ Goal: **excellent but simple** code using modern Angular.
 src/app/
   core/        models, services, guards, preloading strategy
   shared/      modal, button, dropdown, clickOutside directive
-  layout/      shell, sidebar, header, loading bar
+  layout/      shell, sidebar, header, loading bar, toast
   features/
     auth/      login
     boards/    boards.routes.ts + board/task components
@@ -90,7 +90,7 @@ src/app/
 - [x] Redirect `''` → `/boards`
 - [x] Shell layout: sidebar + header + `<router-outlet>`
 - [x] Sidebar: board list with `routerLink` + `routerLinkActive`
-- [x] Sidebar: theme toggle, hide/show sidebar
+- [x] Sidebar: theme toggle (always visible, not collapsible)
 - [x] Mobile: sidebar becomes header dropdown
 - [x] `appClickOutside` directive
 - [x] Not Found page (`**`)
@@ -125,6 +125,7 @@ src/app/
 - [x] Forms expose `hasUnsavedChanges()` for the Phase 7 guard
 - [x] Validation errors ("Can't be empty")
 - [x] Navigate programmatically after create/edit/delete
+- [x] Confirmation toasts after create/edit/delete (`ToastService`)
 - [ ] Commit (you)
 
 ### Phase 6 — Drag and drop
@@ -146,11 +147,11 @@ src/app/
 - [ ] Commit (you)
 
 ### Phase 8 — Advanced routing (Tasks 4 & 6)
-- [ ] Loading bar from Router events (Start / End / Cancel / Error)
-- [ ] Navigation error handling
-- [ ] Custom preloading strategy (`data: { preload: true }`)
-- [ ] Auxiliary route demo (named outlet)
-- [ ] Commit
+- [x] Loading bar from Router events (Start / End / Cancel / Error)
+- [x] Navigation error handling (`withNavigationErrorHandler` → toast with Retry)
+- [x] Custom preloading strategy (`data: { preload: true }` on boards; settings loads on demand)
+- [ ] Auxiliary routes: explain in the README (the lab only asks to discuss them; the Tips panel demo was removed)
+- [ ] Commit (you)
 
 ### Phase 9 — Testing & verification (Task 8)
 - [x] Unit tests: `authGuard`, `guestGuard`, `unsavedChangesGuard` (done in Phase 7)

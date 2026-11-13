@@ -21,16 +21,6 @@ app-theme-toggle {
   width: 100%;
 }
 
-.row {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-}
-
-.saved {
-  color: var(--color-purple);
-}
-
 .hint {
   color: var(--text-secondary);
 }

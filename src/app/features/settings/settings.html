@@ -13,7 +13,6 @@
           required
           pattern=".*\S.*"
           [(ngModel)]="name"
-          (input)="savedMessage.set(false)"
         />
         @if (nameModel.invalid && nameModel.touched) {
           <span class="error">Can't be empty</span>
@@ -21,12 +20,7 @@
       </div>
     </div>
 
-    <div class="row">
-      <button type="submit" class="btn btn-primary">Save Changes</button>
-      @if (savedMessage()) {
-        <p class="body-m saved" role="status">Saved</p>
-      }
-    </div>
+    <button type="submit" class="btn btn-primary">Save Changes</button>
   </form>
 </section>
 

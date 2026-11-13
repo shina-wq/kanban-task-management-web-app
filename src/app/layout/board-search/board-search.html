@@ -21,7 +21,7 @@
     aria-label="Search tasks"
     autocomplete="off"
     [value]="search()"
-    [attr.tabindex]="expanded() ? null : -1"
+    (focus)="open()"
     (input)="setSearch(input.value)"
     (keydown.escape)="clear()"
     (blur)="close()"

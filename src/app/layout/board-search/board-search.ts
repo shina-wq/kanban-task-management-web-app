@@ -12,7 +12,8 @@ import { injectDeepestRoute } from '../../core/routing/deepest-route';
 import { Icon } from '../../shared/icon/icon';
 
 /**
- * Round search button in the header that expands into a search field.
+ * Search field in the header. Always open on tablet and desktop; on mobile it
+ * starts as a round button and expands (the `expanded` class) when used.
  * The search term lives in the URL (?search=…); the board page reads it
  * and filters its tasks.
  */

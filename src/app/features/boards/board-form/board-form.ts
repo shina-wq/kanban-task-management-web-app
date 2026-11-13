@@ -12,6 +12,7 @@ import { Router } from '@angular/router';
 import { HasUnsavedChanges } from '../../../core/guards/unsaved-changes.guard';
 import { BoardDraft } from '../../../core/models/board.model';
 import { BoardService } from '../../../core/services/board.service';
+import { ToastService } from '../../../core/services/toast.service';
 import { createId } from '../../../core/utils/id';
 import { Icon } from '../../../shared/icon/icon';
 import { Modal } from '../../../shared/modal/modal';
@@ -36,6 +37,7 @@ interface ColumnRow {
 export class BoardForm implements OnInit, HasUnsavedChanges {
   private readonly boardService = inject(BoardService);
   private readonly router = inject(Router);
+  private readonly toast = inject(ToastService);
   private readonly form = viewChild.required(NgForm);
 
   /** Route param; undefined on /boards/new. */
@@ -83,13 +85,15 @@ export class BoardForm implements OnInit, HasUnsavedChanges {
     };
     this.saved = true;
 
-    // Programmatic navigation to the saved board.
+    // Save, confirm with a toast, then navigate programmatically to the board.
     const boardId = this.boardId();
     if (boardId) {
       this.boardService.updateBoard(boardId, draft);
+      this.toast.success('Board updated');
       this.router.navigate(['/boards', boardId]);
     } else {
       const board = this.boardService.createBoard(draft);
+      this.toast.success(`“${board.name}” board created`);
       this.router.navigate(['/boards', board.id]);
     }
   }

@@ -111,8 +111,8 @@
   display: none;
 }
 
-/* Mobile: while the search field is open it takes the title's place. */
-@media (max-width: 767.98px) {
+/* Mobile and tablet: while the search field is open it takes the title's place. */
+@media (max-width: 1199.98px) {
   .bar:has(app-board-search.expanded) .title-wrap {
     display: none;
   }

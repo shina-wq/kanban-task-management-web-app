@@ -1,10 +1,10 @@
 /*
-  Collapsed: a round button (same size and shape as "Add New Task").
-  Expanded:  a pill-shaped search field that grows into the header.
+  Desktop: a pill-shaped search field, always open.
+  Mobile and tablet (not enough room): a round button that expands into the field.
 */
 :host {
   --size: 2rem;
-  --open-width: 100%; /* On mobile the header gives the open field the title's space. */
+  --open-width: 100%; /* Below desktop the header gives the open field the title's space. */
   display: block;
 }
 
@@ -94,7 +94,6 @@
 @media (min-width: 768px) {
   :host {
     --size: 3rem;
-    --open-width: 13rem;
   }
 
   .search-button app-icon {
@@ -103,8 +102,24 @@
   }
 }
 
+/* Desktop: there is room, so the field is always open (same look as the expanded field). */
 @media (min-width: 1200px) {
   :host {
     --open-width: 16rem;
+  }
+
+  .pill,
+  :host(:not(.expanded)) .pill:hover {
+    width: var(--open-width);
+    border-color: rgb(130 143 163 / 25%);
+    background-color: var(--bg-input);
+  }
+
+  .pill:focus-within {
+    border-color: var(--color-purple);
+  }
+
+  .search-button {
+    pointer-events: none; /* Just an icon here; the field is already open. */
   }
 }

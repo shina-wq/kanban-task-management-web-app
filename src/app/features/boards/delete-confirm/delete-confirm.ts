@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, computed, inject, input, viewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { BoardService } from '../../../core/services/board.service';
+import { ToastService } from '../../../core/services/toast.service';
 import { Modal } from '../../../shared/modal/modal';
 
 /**
@@ -55,6 +56,7 @@ import { Modal } from '../../../shared/modal/modal';
 export class DeleteConfirm {
   private readonly boardService = inject(BoardService);
   private readonly router = inject(Router);
+  private readonly toast = inject(ToastService);
   private readonly modal = viewChild.required(Modal);
 
   // Route params. `taskId` is only set on the task route.
@@ -70,15 +72,18 @@ export class DeleteConfirm {
 
   protected confirm(): void {
     const taskId = this.taskId();
+    const name = this.name();
 
     if (taskId) {
       this.boardService.deleteTask(this.boardId(), taskId);
+      this.toast.success('Task deleted');
       this.router.navigate(['/boards', this.boardId()], { queryParamsHandling: 'preserve' });
       return;
     }
 
     // After deleting a board, open the next one (or the overview if none are left).
     this.boardService.deleteBoard(this.boardId());
+    this.toast.success(`“${name}” board deleted`);
     const next = this.boardService.boards()[0];
     this.router.navigate(next ? ['/boards', next.id] : ['/boards']);
   }

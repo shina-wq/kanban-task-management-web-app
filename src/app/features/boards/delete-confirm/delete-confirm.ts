@@ -1,4 +1,11 @@
-import { ChangeDetectionStrategy, Component, computed, inject, input, viewChild } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  inject,
+  input,
+  viewChild,
+} from '@angular/core';
 import { Router } from '@angular/router';
 import { BoardService } from '../../../core/services/board.service';
 import { ToastService } from '../../../core/services/toast.service';
@@ -13,7 +20,9 @@ import { Modal } from '../../../shared/modal/modal';
   imports: [Modal],
   template: `
     <app-modal labelledBy="delete-title">
-      <h2 id="delete-title" class="heading-l title">Delete this {{ isTask() ? 'task' : 'board' }}?</h2>
+      <h2 id="delete-title" class="heading-l title">
+        Delete this {{ isTask() ? 'task' : 'board' }}?
+      </h2>
 
       <p class="body-l message">
         @if (isTask()) {

@@ -18,15 +18,15 @@ Goal: **excellent but simple** code using modern Angular.
 
 ## Angular concepts covered
 
-| Concept | Where |
-|---|---|
-| Components & templates | Standalone components, `@if` / `@for` / `@switch` |
-| Data binding & events | `input()`, `output()`, `[class.x]`, `(click)`, `[(ngModel)]` |
-| Directives | Built-ins + custom `appClickOutside` |
-| Lifecycle hooks | `ngOnInit`, `DestroyRef` / `ngOnDestroy`, `afterNextRender` |
-| Change detection | `OnPush` everywhere, signals + `computed()` |
-| Services & DI | `BoardService`, `ThemeService`, `AuthService` via `inject()` |
-| Routing | Lazy loading, child routes, params, query params, guards, preloading (aux routes discussed in README) |
+| Concept                | Where                                                                                                 |
+| ---------------------- | ----------------------------------------------------------------------------------------------------- |
+| Components & templates | Standalone components, `@if` / `@for` / `@switch`                                                     |
+| Data binding & events  | `input()`, `output()`, `[class.x]`, `(click)`, `[(ngModel)]`                                          |
+| Directives             | Built-ins + custom `appClickOutside`                                                                  |
+| Lifecycle hooks        | `ngOnInit`, `DestroyRef` / `ngOnDestroy`, `afterNextRender`                                           |
+| Change detection       | `OnPush` everywhere, signals + `computed()`                                                           |
+| Services & DI          | `BoardService`, `ThemeService`, `AuthService` via `inject()`                                          |
+| Routing                | Lazy loading, child routes, params, query params, guards, preloading (aux routes discussed in README) |
 
 ## Route map
 
@@ -67,6 +67,7 @@ src/app/
 ## Checklist
 
 ### Phase 0 — Project setup (Lab Task 1)
+
 - [x] `ng new` with CSS, standalone, strict mode
 - [x] Remove boilerplate (default template, styles)
 - [x] Add Plus Jakarta Sans font
@@ -78,6 +79,7 @@ src/app/
 - [x] Commit
 
 ### Phase 1 — Data layer & services
+
 - [x] Models: `Board`, `Column`, `Task`, `Subtask`
 - [x] `BoardService` — signal state, CRUD for boards/tasks, toggle subtask, move task
 - [x] `localStorage` persistence (seed on first load)
@@ -86,6 +88,7 @@ src/app/
 - [ ] Commit (you)
 
 ### Phase 2 — Router config & shell layout (Tasks 2, 3, Bonus)
+
 - [x] `provideRouter` with `withComponentInputBinding()`
 - [x] Redirect `''` → `/boards`
 - [x] Shell layout: sidebar + header + `<router-outlet>`
@@ -99,6 +102,7 @@ src/app/
 - [ ] Commit (you)
 
 ### Phase 3 — Boards feature, lazy-loaded (Task 6)
+
 - [x] `boards.routes.ts` loaded via `loadChildren`
 - [x] Boards overview page (cards for all boards)
 - [x] Board detail: columns + task cards ("x of y subtasks")
@@ -107,6 +111,7 @@ src/app/
 - [ ] Commit (you)
 
 ### Phase 4 — Route & query params (Task 5)
+
 - [x] `:boardId` drives the board shown
 - [x] `tasks/:taskId` child route → TaskView modal
 - [x] TaskView: subtask checkboxes + status dropdown
@@ -117,6 +122,7 @@ src/app/
 - [ ] Commit (you)
 
 ### Phase 5 — Forms, modals & programmatic navigation (Task 4)
+
 - [x] Reusable modal component (native `<dialog>`, closes via router navigation) — done in Phase 4
 - [x] Add/Edit Task form (title, description, subtasks list, status)
 - [x] Add/Edit Board form (name, columns list)
@@ -129,6 +135,7 @@ src/app/
 - [ ] Commit (you)
 
 ### Phase 6 — Drag and drop
+
 - [x] Add `@angular/cdk`
 - [x] Drag task cards within and between columns
 - [x] Moving a task updates its status + persists
@@ -137,6 +144,7 @@ src/app/
 - [ ] Commit (you)
 
 ### Phase 7 — Guards (Task 7)
+
 - [x] Login page
 - [x] `authGuard` (`CanActivateFn`) → `/login?returnUrl=…`
 - [x] Redirect back to `returnUrl` after login (only in-app paths are followed)
@@ -147,6 +155,7 @@ src/app/
 - [ ] Commit (you)
 
 ### Phase 8 — Advanced routing (Tasks 4 & 6)
+
 - [x] Loading bar from Router events (Start / End / Cancel / Error)
 - [x] Navigation error handling (`withNavigationErrorHandler` → toast with Retry)
 - [x] Custom preloading strategy (`data: { preload: true }` on boards; settings loads on demand)
@@ -154,14 +163,16 @@ src/app/
 - [ ] Commit (you)
 
 ### Phase 9 — Testing & verification (Task 8)
-- [x] Unit tests: `authGuard`, `guestGuard`, `unsavedChangesGuard` (done in Phase 7)
-- [x] Unit tests: `BoardService`, `AuthService`, `ThemeService` (done in Phase 1)
-- [ ] Manual checklist: every route, lazy chunks load on demand, guards block/allow, active link styling
-- [ ] Production build passes
-- [ ] Commit
+
+- [x] Manual checklist: every route, lazy chunks load on demand, guards block/allow, active link styling
+- [x] Production build passes (0 warnings)
+- [x] Prettier formatting check passes
+- [x] No automated test suite (not required by the lab; the unit tests used during development were removed)
+- [ ] Commit (you)
 
 ### Phase 10 — Deployment prep & docs (Task 9)
+
 - [ ] `vercel.json` SPA rewrite (deep links survive refresh)
 - [ ] README: overview, route map, concepts, how to run, live URL placeholder
 - [ ] Commit
-- [ ] *(User)* Push and deploy to Vercel, verify deep links + fallback route
+- [ ] _(User)_ Push and deploy to Vercel, verify deep links + fallback route

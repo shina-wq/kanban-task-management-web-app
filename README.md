@@ -15,8 +15,7 @@ Then open http://localhost:4200.
 
 ## Scripts
 
-| Command | What it does |
-|---|---|
-| `npm start` | Start the dev server |
+| Command         | What it does                  |
+| --------------- | ----------------------------- |
+| `npm start`     | Start the dev server          |
 | `npm run build` | Production build into `dist/` |
-| `npm test` | Run unit tests (Vitest) |

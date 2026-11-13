@@ -29,9 +29,9 @@ export class ThemeService {
     this.theme.update((theme) => (theme === 'light' ? 'dark' : 'light'));
   }
 
+  /** The operating system's preference; light if the browser can't tell us. */
   private systemTheme(): Theme {
-    return this.document.defaultView?.matchMedia('(prefers-color-scheme: dark)').matches
-      ? 'dark'
-      : 'light';
+    const prefersDark = this.document.defaultView?.matchMedia?.('(prefers-color-scheme: dark)');
+    return prefersDark?.matches ? 'dark' : 'light';
   }
 }

@@ -102,8 +102,14 @@
               "description": "We know what we're planning to build for version one. Now we need to finalise the first pricing model we'll use. Keep iterating the subtasks until we have a coherent proposition.",
               "subtasks": [
                 { "title": "Research competitor pricing and business models", "isCompleted": true },
-                { "title": "Outline a business model that works for our solution", "isCompleted": false },
-                { "title": "Talk to potential customers about our proposed solution and ask for fair price expectancy", "isCompleted": false }
+                {
+                  "title": "Outline a business model that works for our solution",
+                  "isCompleted": false
+                },
+                {
+                  "title": "Talk to potential customers about our proposed solution and ask for fair price expectancy",
+                  "isCompleted": false
+                }
               ]
             }
           ]
@@ -122,14 +128,19 @@
               "id": "pl-t12",
               "title": "Create wireframe prototype",
               "description": "Create a greyscale clickable wireframe prototype to test our assumptions so far.",
-              "subtasks": [{ "title": "Create clickable wireframe prototype in Balsamiq", "isCompleted": true }]
+              "subtasks": [
+                { "title": "Create clickable wireframe prototype in Balsamiq", "isCompleted": true }
+              ]
             },
             {
               "id": "pl-t13",
               "title": "Review results of usability tests and iterate",
               "description": "Keep iterating through the subtasks until we're clear on the core concepts for the app.",
               "subtasks": [
-                { "title": "Meet to review notes from previous tests and plan changes", "isCompleted": true },
+                {
+                  "title": "Meet to review notes from previous tests and plan changes",
+                  "isCompleted": true
+                },
                 { "title": "Make changes to paper prototypes", "isCompleted": true },
                 { "title": "Conduct 5 usability tests", "isCompleted": true }
               ]
@@ -242,7 +253,10 @@
               "description": "Beyond the initial launch, we're keeping the initial roadmap completely empty. This meeting will help us plan out our next steps based on actual customer feedback.",
               "subtasks": [
                 { "title": "Interview 10 customers", "isCompleted": false },
-                { "title": "Review common customer pain points and suggestions", "isCompleted": false },
+                {
+                  "title": "Review common customer pain points and suggestions",
+                  "isCompleted": false
+                },
                 { "title": "Outline next steps for our roadmap", "isCompleted": false }
               ]
             }

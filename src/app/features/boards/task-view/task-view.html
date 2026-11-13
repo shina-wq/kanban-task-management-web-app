@@ -7,7 +7,12 @@
         <a class="menu-item" role="menuitem" routerLink="edit" queryParamsHandling="preserve">
           Edit Task
         </a>
-        <a class="menu-item danger" role="menuitem" routerLink="delete" queryParamsHandling="preserve">
+        <a
+          class="menu-item danger"
+          role="menuitem"
+          routerLink="delete"
+          queryParamsHandling="preserve"
+        >
           Delete Task
         </a>
       </app-menu>
@@ -25,7 +30,11 @@
 
         @for (subtask of found.task.subtasks; track $index) {
           <label class="subtask body-m" [class.done]="subtask.isCompleted">
-            <input type="checkbox" [checked]="subtask.isCompleted" (change)="toggleSubtask($index)" />
+            <input
+              type="checkbox"
+              [checked]="subtask.isCompleted"
+              (change)="toggleSubtask($index)"
+            />
             {{ subtask.title }}
           </label>
         }

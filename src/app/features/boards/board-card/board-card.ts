@@ -15,9 +15,7 @@ import { columnColor } from '../column-color';
         <h2 class="heading-l">{{ board().name }}</h2>
       </div>
 
-      <p class="body-l stats">
-        {{ board().columns.length }} columns · {{ taskCount() }} tasks
-      </p>
+      <p class="body-l stats">{{ board().columns.length }} columns · {{ taskCount() }} tasks</p>
 
       @if (board().columns.length) {
         <ul class="columns">

@@ -26,5 +26,7 @@ export const boardTitle: ResolveFn<string> = (route) =>
 
 /** Browser tab title for an open task. */
 export const taskTitle: ResolveFn<string> = (route) =>
-  inject(BoardService).findTask(route.paramMap.get('boardId') ?? '', route.paramMap.get('taskId') ?? '')
-    ?.task.title ?? 'Task';
+  inject(BoardService).findTask(
+    route.paramMap.get('boardId') ?? '',
+    route.paramMap.get('taskId') ?? '',
+  )?.task.title ?? 'Task';

@@ -20,7 +20,9 @@ export class TaskView {
   readonly taskId = input.required<string>();
 
   protected readonly board = computed(() => this.boardService.getBoard(this.boardId()));
-  protected readonly found = computed(() => this.boardService.findTask(this.boardId(), this.taskId()));
+  protected readonly found = computed(() =>
+    this.boardService.findTask(this.boardId(), this.taskId()),
+  );
 
   protected readonly completedCount = computed(
     () => this.found()?.task.subtasks.filter((subtask) => subtask.isCompleted).length ?? 0,

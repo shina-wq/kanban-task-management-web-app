@@ -34,7 +34,10 @@ export class BoardService {
 
   createBoard(draft: BoardDraft): Board {
     const board: Board = {
-      id: createSlug(draft.name, this.state().map((b) => b.id)),
+      id: createSlug(
+        draft.name,
+        this.state().map((b) => b.id),
+      ),
       name: draft.name.trim(),
       columns: draft.columns.map((c) => ({ id: createId(), name: c.name.trim(), tasks: [] })),
     };

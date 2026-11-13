@@ -5,7 +5,7 @@ export interface HasUnsavedChanges {
   hasUnsavedChanges(): boolean;
 }
 
-export const UNSAVED_CHANGES_MESSAGE = 'You have unsaved changes. Leave without saving?';
+const UNSAVED_CHANGES_MESSAGE = 'You have unsaved changes. Leave without saving?';
 
 /**
  * Asks before leaving a form with unsaved changes — whether the user closes the

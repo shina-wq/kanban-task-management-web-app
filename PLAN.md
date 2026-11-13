@@ -136,12 +136,14 @@ src/app/
 - [ ] Commit (you)
 
 ### Phase 7 — Guards (Task 7)
-- [ ] Login page
-- [ ] `authGuard` (`CanActivateFn`) → `/login?returnUrl=…`
-- [ ] Redirect back to `returnUrl` after login
-- [ ] `unsavedChangesGuard` (`CanDeactivateFn`) on all forms
-- [ ] Settings page (display name, theme) with guard + logout
-- [ ] Commit
+- [x] Login page
+- [x] `authGuard` (`CanActivateFn`) → `/login?returnUrl=…`
+- [x] Redirect back to `returnUrl` after login (only in-app paths are followed)
+- [x] `guestGuard`: logged-in users visiting /login go to /boards
+- [x] `unsavedChangesGuard` (`CanDeactivateFn`) on all forms (Escape, backdrop, links and browser Back)
+- [x] `canceledNavigationResolution: 'computed'` keeps the URL right when Back is cancelled
+- [x] Settings page (display name, theme) with guard + logout
+- [ ] Commit (you)
 
 ### Phase 8 — Advanced routing (Tasks 4 & 6)
 - [ ] Loading bar from Router events (Start / End / Cancel / Error)
@@ -151,7 +153,7 @@ src/app/
 - [ ] Commit
 
 ### Phase 9 — Testing & verification (Task 8)
-- [ ] Unit tests: `authGuard`, `unsavedChangesGuard`
+- [x] Unit tests: `authGuard`, `guestGuard`, `unsavedChangesGuard` (done in Phase 7)
 - [x] Unit tests: `BoardService`, `AuthService`, `ThemeService` (done in Phase 1)
 - [ ] Manual checklist: every route, lazy chunks load on demand, guards block/allow, active link styling
 - [ ] Production build passes

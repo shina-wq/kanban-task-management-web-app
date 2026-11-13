@@ -1,0 +1,42 @@
+:host {
+  display: grid;
+  align-content: start;
+  gap: 1.5rem;
+  max-width: 32rem;
+  padding: 1.5rem 1rem;
+}
+
+.card {
+  display: grid;
+  gap: 1rem;
+  justify-items: start;
+  padding: 1.5rem;
+  border-radius: var(--radius-md);
+  background-color: var(--bg-surface);
+  box-shadow: var(--shadow-card);
+}
+
+.card .form,
+app-theme-toggle {
+  width: 100%;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.saved {
+  color: var(--color-purple);
+}
+
+.hint {
+  color: var(--text-secondary);
+}
+
+@media (min-width: 768px) {
+  :host {
+    padding: 1.5rem;
+  }
+}

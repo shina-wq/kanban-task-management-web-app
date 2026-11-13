@@ -9,6 +9,7 @@ import {
 } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
+import { HasUnsavedChanges } from '../../../core/guards/unsaved-changes.guard';
 import { TaskDraft } from '../../../core/models/board.model';
 import { BoardService } from '../../../core/services/board.service';
 import { createId } from '../../../core/utils/id';
@@ -32,7 +33,7 @@ interface SubtaskRow {
   templateUrl: './task-form.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class TaskForm implements OnInit {
+export class TaskForm implements OnInit, HasUnsavedChanges {
   private readonly boardService = inject(BoardService);
   private readonly router = inject(Router);
   private readonly form = viewChild.required(NgForm);

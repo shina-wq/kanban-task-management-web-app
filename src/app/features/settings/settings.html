@@ -1,0 +1,47 @@
+<section class="card" aria-labelledby="profile-title">
+  <h2 id="profile-title" class="heading-m">Profile</h2>
+
+  <form class="form" novalidate (ngSubmit)="saveProfile()">
+    <div>
+      <label class="label" for="settings-name">Display name</label>
+      <div class="control">
+        <input
+          #nameModel="ngModel"
+          id="settings-name"
+          name="name"
+          class="input"
+          required
+          pattern=".*\S.*"
+          [(ngModel)]="name"
+          (input)="savedMessage.set(false)"
+        />
+        @if (nameModel.invalid && nameModel.touched) {
+          <span class="error">Can't be empty</span>
+        }
+      </div>
+    </div>
+
+    <div class="row">
+      <button type="submit" class="btn btn-primary">Save Changes</button>
+      @if (savedMessage()) {
+        <p class="body-m saved" role="status">Saved</p>
+      }
+    </div>
+  </form>
+</section>
+
+<section class="card" aria-labelledby="appearance-title">
+  <h2 id="appearance-title" class="heading-m">Appearance</h2>
+  <app-theme-toggle />
+</section>
+
+<section class="card" aria-labelledby="data-title">
+  <h2 id="data-title" class="heading-m">Data</h2>
+  <p class="body-l hint">Boards are saved in this browser. Reset them to the sample boards at any time.</p>
+  <button type="button" class="btn btn-destructive" (click)="resetData()">Reset sample data</button>
+</section>
+
+<section class="card" aria-labelledby="account-title">
+  <h2 id="account-title" class="heading-m">Account</h2>
+  <button type="button" class="btn btn-secondary" (click)="logout()">Log Out</button>
+</section>

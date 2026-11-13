@@ -1,0 +1,41 @@
+<main class="page">
+  <div class="card">
+    <div class="logo">
+      <app-icon name="logo-mark" class="logo-mark" />
+      <span class="wordmark">kanban</span>
+    </div>
+
+    <div>
+      <h1 class="heading-xl">Welcome back</h1>
+      <p class="body-l intro">Enter a display name to open your boards.</p>
+    </div>
+
+    <form #form="ngForm" class="form" novalidate (ngSubmit)="login(form)">
+      <div>
+        <label class="label" for="login-name">Display name</label>
+        <div class="control">
+          <input
+            #nameModel="ngModel"
+            id="login-name"
+            name="name"
+            class="input"
+            placeholder="e.g. Ada Lovelace"
+            autocomplete="nickname"
+            required
+            pattern=".*\S.*"
+            [(ngModel)]="name"
+          />
+          @if (nameModel.invalid && nameModel.touched) {
+            <span class="error">Can't be empty</span>
+          }
+        </div>
+      </div>
+
+      <button type="submit" class="btn btn-primary btn-lg btn-block">Log In</button>
+    </form>
+
+    <p class="body-m note">Demo login: no password, nothing leaves your browser.</p>
+  </div>
+
+  <app-theme-toggle class="theme" />
+</main>

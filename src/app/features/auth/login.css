@@ -1,0 +1,57 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  min-height: 100dvh;
+  padding: 2rem 1rem;
+}
+
+.card {
+  display: grid;
+  gap: 1.5rem;
+  width: min(100%, 26rem);
+  padding: 2rem 1.5rem;
+  border-radius: var(--radius-md);
+  background-color: var(--bg-surface);
+  box-shadow: var(--shadow-card);
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  color: var(--color-purple);
+}
+
+.logo-mark {
+  width: 1.5rem;
+  height: 1.5625rem;
+}
+
+.wordmark {
+  font-size: 2rem;
+  font-weight: var(--font-bold);
+  letter-spacing: -0.06em;
+  color: var(--text-primary);
+}
+
+.intro,
+.note {
+  color: var(--text-secondary);
+}
+
+.intro {
+  margin-top: 0.5rem;
+}
+
+.theme {
+  width: min(100%, 15rem);
+}
+
+@media (min-width: 768px) {
+  .card {
+    padding: 2.5rem 2rem;
+  }
+}

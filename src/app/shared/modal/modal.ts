@@ -83,15 +83,17 @@ export class Modal {
   }
 
   /**
-   * Go back to the parent route (e.g. from /boards/x/tasks/y to /boards/x).
-   * Relative to the parent *route*, not "..", because a route path like
-   * 'tasks/:taskId' spans two URL segments.
+   * Go back to the page behind the modal (e.g. from /boards/x/tasks/y to /boards/x):
+   * the nearest parent route that shows a component. Componentless parents
+   * (like 'tasks/:taskId', which only groups routes) are skipped.
+   * We navigate by route, not "..", because a path like 'tasks/:taskId'
+   * spans two URL segments.
    */
   close(): void {
-    this.router.navigate(['.'], {
-      relativeTo: this.route.parent,
-      queryParamsHandling: 'preserve',
-    });
+    let page = this.route.parent;
+    while (page?.parent && !page.component) page = page.parent;
+
+    this.router.navigate(['.'], { relativeTo: page, queryParamsHandling: 'preserve' });
   }
 
   protected onCancel(event: Event): void {

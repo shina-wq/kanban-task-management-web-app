@@ -1,0 +1,63 @@
+<app-modal labelledBy="board-form-title">
+  <h2 id="board-form-title" class="heading-l">{{ isEdit() ? 'Edit Board' : 'Add New Board' }}</h2>
+
+  <form class="form" novalidate (ngSubmit)="save()">
+    <div>
+      <label class="label" for="board-name">Board Name</label>
+      <div class="control">
+        <input
+          #nameModel="ngModel"
+          id="board-name"
+          name="name"
+          class="input"
+          placeholder="e.g. Web Design"
+          required
+          pattern=".*\S.*"
+          [(ngModel)]="name"
+        />
+        @if (nameModel.invalid && nameModel.touched) {
+          <span class="error">Can't be empty</span>
+        }
+      </div>
+    </div>
+
+    <fieldset class="form-rows">
+      <legend class="label">Board Columns</legend>
+
+      @for (column of columns; track column.key; let i = $index) {
+        <div class="form-row">
+          <div class="control">
+            <input
+              #columnModel="ngModel"
+              class="input"
+              [name]="'column-' + column.key"
+              [attr.aria-label]="'Column ' + (i + 1) + ' name'"
+              required
+              pattern=".*\S.*"
+              [(ngModel)]="column.name"
+            />
+            @if (columnModel.invalid && columnModel.touched) {
+              <span class="error">Can't be empty</span>
+            }
+          </div>
+          <button
+            type="button"
+            class="remove-row"
+            [attr.aria-label]="'Remove column ' + (column.name || i + 1)"
+            (click)="removeColumn(i)"
+          >
+            <app-icon name="cross" />
+          </button>
+        </div>
+      }
+
+      <button type="button" class="btn btn-secondary btn-block" (click)="addColumn()">
+        + Add New Column
+      </button>
+    </fieldset>
+
+    <button type="submit" class="btn btn-primary btn-block">
+      {{ isEdit() ? 'Save Changes' : 'Create New Board' }}
+    </button>
+  </form>
+</app-modal>

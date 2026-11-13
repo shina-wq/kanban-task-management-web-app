@@ -118,12 +118,14 @@ src/app/
 
 ### Phase 5 — Forms, modals & programmatic navigation (Task 4)
 - [x] Reusable modal component (native `<dialog>`, closes via router navigation) — done in Phase 4
-- [ ] Add/Edit Task form (title, description, subtasks list, status)
-- [ ] Add/Edit Board form (name, columns list)
-- [ ] Delete board / delete task confirm modals
-- [ ] Validation errors ("Can't be empty")
-- [ ] Navigate programmatically after create/edit/delete
-- [ ] Commit
+- [x] Add/Edit Task form (title, description, subtasks list, status)
+- [x] Add/Edit Board form (name, columns list)
+- [x] Delete board / delete task confirm modals
+- [x] Task routes grouped under a componentless `tasks/:taskId` parent (guard runs once)
+- [x] Forms expose `hasUnsavedChanges()` for the Phase 7 guard
+- [x] Validation errors ("Can't be empty")
+- [x] Navigate programmatically after create/edit/delete
+- [ ] Commit (you)
 
 ### Phase 6 — Drag and drop
 - [ ] Add `@angular/cdk`

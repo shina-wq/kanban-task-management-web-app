@@ -1,0 +1,84 @@
+<app-modal labelledBy="task-form-title">
+  <h2 id="task-form-title" class="heading-l">{{ isEdit() ? 'Edit Task' : 'Add New Task' }}</h2>
+
+  <form class="form" novalidate (ngSubmit)="save()">
+    <div>
+      <label class="label" for="task-title">Title</label>
+      <div class="control">
+        <input
+          #titleModel="ngModel"
+          id="task-title"
+          name="title"
+          class="input"
+          placeholder="e.g. Take coffee break"
+          required
+          pattern=".*\S.*"
+          [(ngModel)]="title"
+        />
+        @if (titleModel.invalid && titleModel.touched) {
+          <span class="error">Can't be empty</span>
+        }
+      </div>
+    </div>
+
+    <div>
+      <label class="label" for="task-description">Description</label>
+      <textarea
+        id="task-description"
+        name="description"
+        class="input"
+        placeholder="e.g. It's always good to take a break. This 15 minute break will recharge the batteries a little."
+        [(ngModel)]="description"
+      ></textarea>
+    </div>
+
+    <fieldset class="form-rows">
+      <legend class="label">Subtasks</legend>
+
+      @for (subtask of subtasks; track subtask.key; let i = $index) {
+        <div class="form-row">
+          <div class="control">
+            <input
+              #subtaskModel="ngModel"
+              class="input"
+              [name]="'subtask-' + subtask.key"
+              [attr.aria-label]="'Subtask ' + (i + 1)"
+              [placeholder]="i === 0 ? 'e.g. Make coffee' : 'e.g. Drink coffee & smile'"
+              required
+              pattern=".*\S.*"
+              [(ngModel)]="subtask.title"
+            />
+            @if (subtaskModel.invalid && subtaskModel.touched) {
+              <span class="error">Can't be empty</span>
+            }
+          </div>
+          <button
+            type="button"
+            class="remove-row"
+            [attr.aria-label]="'Remove subtask ' + (i + 1)"
+            (click)="removeSubtask(i)"
+          >
+            <app-icon name="cross" />
+          </button>
+        </div>
+      }
+
+      <button type="button" class="btn btn-secondary btn-block" (click)="addSubtask()">
+        + Add New Subtask
+      </button>
+    </fieldset>
+
+    <div>
+      <label class="label" for="task-status">Status</label>
+      <select id="task-status" name="status" class="select" required [(ngModel)]="columnId">
+        @for (column of statuses(); track column.id) {
+          <option [value]="column.id">{{ column.name }}</option>
+        }
+      </select>
+    </div>
+
+    <button type="submit" class="btn btn-primary btn-block">
+      {{ isEdit() ? 'Save Changes' : 'Create Task' }}
+    </button>
+  </form>
+</app-modal>

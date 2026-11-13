@@ -127,6 +127,11 @@ ol {
   list-style: none;
 }
 
+fieldset {
+  min-width: 0;
+  border: none;
+}
+
 :focus-visible {
   outline: 2px solid var(--color-purple);
   outline-offset: 2px;
@@ -344,6 +349,74 @@ ol {
 .select:focus {
   border-color: var(--color-purple);
   outline: none;
+}
+
+textarea.input {
+  height: 7rem;
+  padding: 0.5rem 1rem;
+  line-height: 1.4375rem;
+  resize: vertical;
+}
+
+/* Angular adds ng-invalid / ng-touched to form controls automatically. */
+.input.ng-invalid.ng-touched {
+  border-color: var(--color-red);
+  padding-right: 7.5rem;
+}
+
+/* Wraps an input so its "Can't be empty" message can sit inside it, on the right. */
+.control {
+  position: relative;
+  flex: 1;
+}
+
+.control .error {
+  position: absolute;
+  top: 50%;
+  right: 1rem;
+  translate: 0 -50%;
+  font-size: 0.8125rem;
+  color: var(--color-red);
+  pointer-events: none;
+}
+
+/* Layout for the forms inside modals. */
+.form {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.form-rows {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.form-row {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.remove-row {
+  display: grid;
+  place-items: center;
+  width: 1.5rem;
+  height: 2.5rem;
+  color: var(--text-secondary);
+  transition: color var(--transition);
+}
+
+.remove-row:hover {
+  color: var(--color-red);
+}
+
+.remove-row .icon {
+  width: 0.9375rem;
+  height: 0.9375rem;
+}
+
+.btn-block {
+  width: 100%;
 }
 
 .select {

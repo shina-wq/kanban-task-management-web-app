@@ -1,0 +1,215 @@
+/* ==========================================================================
+   Design tokens (Frontend Mentor Kanban style guide)
+   ========================================================================== */
+:root {
+  /* Palette */
+  --color-purple: #635fc7;
+  --color-purple-hover: #a8a4ff;
+  --color-black: #000112;
+  --color-very-dark-grey: #20212c;
+  --color-dark-grey: #2b2c37;
+  --color-lines-dark: #3e3f4e;
+  --color-medium-grey: #828fa3;
+  --color-lines-light: #e4ebfa;
+  --color-light-grey: #f4f7fd;
+  --color-white: #ffffff;
+  --color-red: #ea5555;
+  --color-red-hover: #ff9898;
+
+  /* Column status dots */
+  --color-dot-1: #49c4e5;
+  --color-dot-2: #8471f2;
+  --color-dot-3: #67e2ae;
+  --color-dot-4: #e5a449;
+  --color-dot-5: #e55a49;
+
+  /* Typography */
+  --font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+  --font-medium: 500;
+  --font-bold: 700;
+
+  /* Layout */
+  --header-height-mobile: 4rem;
+  --header-height: 5rem;
+  --header-height-desktop: 6rem;
+  --sidebar-width: 16.25rem;
+  --sidebar-width-desktop: 18.75rem;
+  --column-width: 17.5rem;
+  --radius-sm: 0.25rem;
+  --radius-md: 0.5rem;
+  --radius-pill: 6rem;
+  --shadow-card: 0 4px 6px rgb(54 78 126 / 10%);
+  --transition: 150ms ease;
+
+  /* Semantic theme colors (light) */
+  --bg-app: var(--color-light-grey);
+  --bg-surface: var(--color-white);
+  --bg-input: var(--color-white);
+  --text-primary: var(--color-black);
+  --text-secondary: var(--color-medium-grey);
+  --border: var(--color-lines-light);
+  --bg-secondary-button: rgb(99 95 199 / 10%);
+  --bg-secondary-button-hover: rgb(99 95 199 / 25%);
+  --bg-subtask: var(--color-light-grey);
+  --bg-new-column: linear-gradient(180deg, #e9effa 0%, rgb(233 239 250 / 50%) 100%);
+
+  color-scheme: light;
+}
+
+:root[data-theme='dark'] {
+  --bg-app: var(--color-very-dark-grey);
+  --bg-surface: var(--color-dark-grey);
+  --bg-input: var(--color-dark-grey);
+  --text-primary: var(--color-white);
+  --text-secondary: var(--color-medium-grey);
+  --border: var(--color-lines-dark);
+  --bg-secondary-button: var(--color-white);
+  --bg-secondary-button-hover: var(--color-white);
+  --bg-subtask: var(--color-very-dark-grey);
+  --bg-new-column: linear-gradient(180deg, rgb(43 44 55 / 25%) 0%, rgb(43 44 55 / 12.5%) 100%);
+
+  color-scheme: dark;
+}
+
+/* ==========================================================================
+   Reset
+   ========================================================================== */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  font-family: var(--font-family);
+  font-weight: var(--font-medium);
+  font-size: 0.8125rem;
+  line-height: 1.77;
+  color: var(--text-primary);
+  background-color: var(--bg-app);
+  -webkit-font-smoothing: antialiased;
+}
+
+img,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+  color: inherit;
+}
+
+button {
+  cursor: pointer;
+  background: none;
+  border: none;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+ul,
+ol {
+  list-style: none;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-purple);
+  outline-offset: 2px;
+}
+
+/* ==========================================================================
+   Typography (style guide scale)
+   ========================================================================== */
+.heading-xl {
+  font-size: 1.5rem;
+  line-height: 1.875rem;
+  font-weight: var(--font-bold);
+}
+
+.heading-l {
+  font-size: 1.125rem;
+  line-height: 1.4375rem;
+  font-weight: var(--font-bold);
+}
+
+.heading-m {
+  font-size: 0.9375rem;
+  line-height: 1.1875rem;
+  font-weight: var(--font-bold);
+}
+
+.heading-s {
+  font-size: 0.75rem;
+  line-height: 0.9375rem;
+  font-weight: var(--font-bold);
+  letter-spacing: 0.15rem;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+}
+
+.body-l {
+  font-size: 0.8125rem;
+  line-height: 1.4375rem;
+  font-weight: var(--font-medium);
+}
+
+.body-m {
+  font-size: 0.75rem;
+  line-height: 0.9375rem;
+  font-weight: var(--font-bold);
+}
+
+/* ==========================================================================
+   Icons — SVG files used as masks so they take the current text color
+   Usage: <span class="icon" style="--icon: url(/icons/board.svg)"></span>
+   ========================================================================== */
+.icon {
+  display: inline-block;
+  flex-shrink: 0;
+  width: 1rem;
+  height: 1rem;
+  background-color: currentColor;
+  mask: var(--icon) center / contain no-repeat;
+}
+
+/* ==========================================================================
+   Utilities
+   ========================================================================== */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* Thin themed scrollbars */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0ms !important;
+    animation-duration: 0ms !important;
+  }
+}

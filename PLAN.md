@@ -18,15 +18,15 @@ Goal: **excellent but simple** code using modern Angular.
 
 ## Angular concepts covered
 
-| Concept                | Where                                                                                                 |
-| ---------------------- | ----------------------------------------------------------------------------------------------------- |
-| Components & templates | Standalone components, `@if` / `@for` / `@switch`                                                     |
-| Data binding & events  | `input()`, `output()`, `[class.x]`, `(click)`, `[(ngModel)]`                                          |
-| Directives             | Built-ins + custom `appClickOutside`                                                                  |
-| Lifecycle hooks        | `ngOnInit`, `DestroyRef` / `ngOnDestroy`, `afterNextRender`                                           |
-| Change detection       | `OnPush` everywhere, signals + `computed()`                                                           |
-| Services & DI          | `BoardService`, `ThemeService`, `AuthService` via `inject()`                                          |
-| Routing                | Lazy loading, child routes, params, query params, guards, preloading (aux routes discussed in README) |
+| Concept                | Where                                                                                |
+| ---------------------- | ------------------------------------------------------------------------------------ |
+| Components & templates | Standalone components, `@if` / `@for` / `@switch`                                    |
+| Data binding & events  | `input()`, `output()`, `[class.x]`, `(click)`, `[(ngModel)]`                         |
+| Directives             | Built-ins + custom `appClickOutside`                                                 |
+| Lifecycle hooks        | `ngOnInit`, `DestroyRef` / `ngOnDestroy`, `afterNextRender`                          |
+| Change detection       | `OnPush` everywhere, signals + `computed()`                                          |
+| Services & DI          | `BoardService`, `ThemeService`, `AuthService` via `inject()`                         |
+| Routing                | Lazy loading, child routes, params, query params, guards, preloading (no aux routes) |
 
 ## Route map
 
@@ -159,7 +159,7 @@ src/app/
 - [x] Loading bar from Router events (Start / End / Cancel / Error)
 - [x] Navigation error handling (`withNavigationErrorHandler` → toast with Retry)
 - [x] Custom preloading strategy (`data: { preload: true }` on boards; settings loads on demand)
-- [ ] Auxiliary routes: explain in the README (the lab only asks to discuss them; the Tips panel demo was removed)
+- [x] Auxiliary routes: not implemented (the lab only asks to discuss them; the Tips panel demo was removed)
 - [ ] Commit (you)
 
 ### Phase 9 — Testing & verification (Task 8)
@@ -172,7 +172,7 @@ src/app/
 
 ### Phase 10 — Deployment prep & docs (Task 9)
 
-- [ ] `vercel.json` SPA rewrite (deep links survive refresh)
-- [ ] README: overview, route map, concepts, how to run, live URL placeholder
-- [ ] Commit
+- [x] `vercel.json`: build command, output folder, SPA rewrite (deep links survive refresh)
+- [x] README: overview, features, tech stack, routes, how to run, structure, live URL placeholder
+- [ ] Commit (you)
 - [ ] _(User)_ Push and deploy to Vercel, verify deep links + fallback route

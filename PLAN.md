@@ -128,10 +128,12 @@ src/app/
 - [ ] Commit (you)
 
 ### Phase 6 — Drag and drop
-- [ ] Add `@angular/cdk`
-- [ ] Drag task cards within and between columns
-- [ ] Moving a task updates its status + persists
-- [ ] Commit
+- [x] Add `@angular/cdk`
+- [x] Drag task cards within and between columns
+- [x] Moving a task updates its status + persists
+- [x] Dragging is off while a search is active (filtered positions aren't real positions)
+- [x] Board auto-scrolls while dragging (`CdkScrollable` on the board, kept in the lazy chunk)
+- [ ] Commit (you)
 
 ### Phase 7 — Guards (Task 7)
 - [ ] Login page

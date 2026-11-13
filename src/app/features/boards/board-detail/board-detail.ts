@@ -1,8 +1,10 @@
+import { CdkDropListGroup } from '@angular/cdk/drag-drop';
+import { CdkScrollable } from '@angular/cdk/scrolling';
 import { ChangeDetectionStrategy, Component, computed, inject, input } from '@angular/core';
 import { RouterLink, RouterOutlet } from '@angular/router';
 import { BoardService } from '../../../core/services/board.service';
 import { filterColumns } from '../../../core/utils/task-filters';
-import { BoardColumn } from '../board-column/board-column';
+import { BoardColumn, TaskDrop } from '../board-column/board-column';
 
 /**
  * /boards/:boardId?search=…
@@ -10,10 +12,12 @@ import { BoardColumn } from '../board-column/board-column';
  */
 @Component({
   selector: 'app-board-detail',
-  imports: [RouterLink, RouterOutlet, BoardColumn],
+  imports: [RouterLink, RouterOutlet, BoardColumn, CdkDropListGroup],
   templateUrl: './board-detail.html',
   styleUrl: './board-detail.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  // The board scrolls itself, so drag and drop can auto-scroll it near the edges.
+  hostDirectives: [CdkScrollable],
 })
 export class BoardDetail {
   private readonly boardService = inject(BoardService);
@@ -32,6 +36,11 @@ export class BoardDetail {
 
   protected readonly totalTasks = computed(() => countTasks(this.board()?.columns ?? []));
   protected readonly shownTasks = computed(() => countTasks(this.columns()));
+
+  /** Drag and drop: save the task's new column (status) and position. */
+  protected moveTask(drop: TaskDrop): void {
+    this.boardService.moveTask(this.boardId(), drop.taskId, drop.columnId, drop.index);
+  }
 }
 
 function countTasks(columns: { tasks: unknown[] }[]): number {

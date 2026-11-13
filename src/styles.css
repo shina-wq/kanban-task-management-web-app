@@ -429,6 +429,21 @@ textarea.input {
 }
 
 /* ==========================================================================
+   Drag and drop (Angular CDK). The preview is attached to <body>, so it is styled globally.
+   ========================================================================== */
+.cdk-drag-preview {
+  border-radius: var(--radius-md);
+  box-shadow: 0 12px 24px rgb(54 78 126 / 30%);
+  rotate: 2deg;
+  cursor: grabbing;
+}
+
+/* The card gliding into its new place after it's dropped. */
+.cdk-drag-animating {
+  transition: transform 200ms ease;
+}
+
+/* ==========================================================================
    Utilities
    ========================================================================== */
 .sr-only {

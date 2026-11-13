@@ -14,7 +14,7 @@ Goal: **excellent but simple** code using modern Angular.
 - [x] Styling: plain CSS + CSS variables (no UI library, no Tailwind)
 - [x] Data: Frontend Mentor `data.json` as seed, persisted to `localStorage`
 - [x] Deploy: Vercel (`vercel.json` SPA rewrite), deployed by the user
-- [x] Git: commit after each phase, no pushing
+- [x] Git: you commit and push after each phase
 
 ## Angular concepts covered
 
@@ -78,12 +78,12 @@ src/app/
 - [x] Commit
 
 ### Phase 1 — Data layer & services
-- [ ] Models: `Board`, `Column`, `Task`, `Subtask`
-- [ ] `BoardService` — signal state, CRUD for boards/tasks, toggle subtask, move task
-- [ ] `localStorage` persistence (seed on first load)
-- [ ] `ThemeService` — light/dark, persisted
-- [ ] `AuthService` — fake login/logout, `isLoggedIn` signal
-- [ ] Commit
+- [x] Models: `Board`, `Column`, `Task`, `Subtask`
+- [x] `BoardService` — signal state, CRUD for boards/tasks, toggle subtask, move task
+- [x] `localStorage` persistence (seed on first load)
+- [x] `ThemeService` — light/dark, persisted
+- [x] `AuthService` — fake login/logout, `isLoggedIn` signal
+- [ ] Commit (you)
 
 ### Phase 2 — Router config & shell layout (Tasks 2, 3, Bonus)
 - [ ] `provideRouter` with `withComponentInputBinding()`
@@ -146,7 +146,7 @@ src/app/
 
 ### Phase 9 — Testing & verification (Task 8)
 - [ ] Unit tests: `authGuard`, `unsavedChangesGuard`
-- [ ] Unit tests: `BoardService`
+- [x] Unit tests: `BoardService`, `AuthService`, `ThemeService` (done in Phase 1)
 - [ ] Manual checklist: every route, lazy chunks load on demand, guards block/allow, active link styling
 - [ ] Production build passes
 - [ ] Commit

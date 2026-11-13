@@ -1,0 +1,45 @@
+<a
+  class="heading-s all-boards"
+  routerLink="/boards"
+  routerLinkActive="active"
+  [routerLinkActiveOptions]="{ exact: true }"
+  ariaCurrentWhenActive="page"
+  (click)="navigate.emit()"
+>
+  All boards ({{ boards().length }})
+</a>
+
+<ul>
+  @for (board of boards(); track board.id) {
+    <li>
+      <a
+        class="nav-item"
+        [routerLink]="['/boards', board.id]"
+        routerLinkActive="active"
+        ariaCurrentWhenActive="page"
+        (click)="navigate.emit()"
+      >
+        <app-icon name="board" />
+        <span class="name">{{ board.name }}</span>
+      </a>
+    </li>
+  }
+  <li>
+    <a class="nav-item create" routerLink="/boards/new" (click)="navigate.emit()">
+      <app-icon name="board" />
+      + Create New Board
+    </a>
+  </li>
+  <li>
+    <a
+      class="nav-item"
+      routerLink="/settings"
+      routerLinkActive="active"
+      ariaCurrentWhenActive="page"
+      (click)="navigate.emit()"
+    >
+      <app-icon name="settings" />
+      Settings
+    </a>
+  </li>
+</ul>

@@ -86,16 +86,17 @@ src/app/
 - [ ] Commit (you)
 
 ### Phase 2 — Router config & shell layout (Tasks 2, 3, Bonus)
-- [ ] `provideRouter` with `withComponentInputBinding()`
-- [ ] Redirect `''` → `/boards`
-- [ ] Shell layout: sidebar + header + `<router-outlet>`
-- [ ] Sidebar: board list with `routerLink` + `routerLinkActive`
-- [ ] Sidebar: theme toggle, hide/show sidebar
-- [ ] Mobile: sidebar becomes header dropdown
-- [ ] `appClickOutside` directive
-- [ ] Not Found page (`**`)
-- [ ] Verify navigation without page reloads
-- [ ] Commit
+- [x] `provideRouter` with `withComponentInputBinding()`
+- [x] Redirect `''` → `/boards`
+- [x] Shell layout: sidebar + header + `<router-outlet>`
+- [x] Sidebar: board list with `routerLink` + `routerLinkActive`
+- [x] Sidebar: theme toggle, hide/show sidebar
+- [x] Mobile: sidebar becomes header dropdown
+- [x] `appClickOutside` directive
+- [x] Not Found page (`**`)
+- [x] Page titles via custom `TitleStrategy` ("Settings | Kanban")
+- [x] Verify navigation without page reloads
+- [ ] Commit (you)
 
 ### Phase 3 — Boards feature, lazy-loaded (Task 6)
 - [ ] `boards.routes.ts` loaded via `loadChildren`

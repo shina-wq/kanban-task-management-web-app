@@ -1,0 +1,74 @@
+/*
+  Mobile:              Tablet / desktop:          Sidebar hidden:
+  ┌────────────┐       ┌────────┬──────────┐      ┌────────┬──────────┐
+  │   header   │       │ header (logo|bar) │      │ header (logo|bar) │
+  ├────────────┤       ├────────┼──────────┤      ├────────┴──────────┤
+  │    main    │       │sidebar │   main   │      │       main        │
+  └────────────┘       └────────┴──────────┘      └───────────────────┘
+*/
+:host {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: auto 1fr;
+  height: 100dvh;
+}
+
+.header {
+  grid-column: 1 / -1;
+}
+
+.sidebar,
+.show-sidebar {
+  display: none;
+}
+
+.main {
+  grid-column: 1 / -1;
+  min-width: 0;
+  min-height: 0;
+  overflow: auto;
+}
+
+@media (min-width: 768px) {
+  :host {
+    grid-template-columns: var(--sidebar-width) 1fr;
+  }
+
+  .sidebar {
+    display: flex;
+  }
+
+  :host(:not(.sidebar-hidden)) .main {
+    grid-column: 2;
+  }
+
+  .show-sidebar {
+    position: fixed;
+    bottom: 2rem;
+    left: 0;
+    z-index: 5;
+    display: grid;
+    place-items: center;
+    width: 3.5rem;
+    height: 3rem;
+    border-radius: 0 var(--radius-pill) var(--radius-pill) 0;
+    background-color: var(--color-purple);
+    color: var(--color-white);
+    transition: background-color var(--transition);
+  }
+
+  .show-sidebar:hover {
+    background-color: var(--color-purple-hover);
+  }
+
+  .show-sidebar app-icon {
+    width: 1rem;
+    height: 1rem;
+  }
+}
+
+@media (min-width: 1200px) {
+  :host {
+    grid-template-columns: var(--sidebar-width-desktop) 1fr;
+  }
+}

@@ -1,0 +1,226 @@
+:host {
+  display: flex;
+  height: var(--header-height-mobile);
+  background-color: var(--bg-surface);
+}
+
+/* ---------------------------------------------------------------- Logo */
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0 1rem;
+  color: var(--color-purple);
+}
+
+.logo-mark {
+  width: 1.5rem;
+  height: 1.5625rem;
+}
+
+.wordmark {
+  display: none;
+  font-size: 2rem;
+  font-weight: var(--font-bold);
+  letter-spacing: -0.06em;
+  color: var(--text-primary);
+}
+
+/* ---------------------------------------------------------------- Bar */
+.bar {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  min-width: 0;
+  padding-right: 1rem;
+}
+
+.title-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-width: 0;
+}
+
+.title {
+  font-size: 1.125rem;
+  line-height: 1.4375rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.mobile-nav-toggle {
+  display: grid;
+  place-items: center;
+  padding: 0.5rem 0.25rem;
+  color: var(--color-purple);
+}
+
+.mobile-nav-toggle app-icon {
+  width: 0.625rem;
+  height: 0.4375rem;
+}
+
+/* ---------------------------------------------------------------- Mobile dropdown */
+.mobile-nav {
+  position: fixed;
+  top: calc(var(--header-height-mobile) + 1rem);
+  left: 50%;
+  z-index: 20;
+  width: min(16.5rem, calc(100vw - 2rem));
+  translate: -50%;
+  padding: 1rem 0;
+  border-radius: var(--radius-md);
+  background-color: var(--bg-surface);
+  box-shadow: 0 10px 20px rgb(54 78 126 / 25%);
+}
+
+.mobile-nav app-theme-toggle {
+  margin: 1rem 1rem 0;
+}
+
+.backdrop {
+  position: fixed;
+  inset: var(--header-height-mobile) 0 0;
+  z-index: 10;
+  background-color: rgb(0 0 0 / 50%);
+}
+
+/* ---------------------------------------------------------------- Actions */
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.add-task {
+  height: 2rem;
+  padding: 0 1.125rem;
+}
+
+.add-task app-icon {
+  width: 0.75rem;
+  height: 0.75rem;
+}
+
+.add-task-label {
+  display: none;
+}
+
+.menu-wrap {
+  position: relative;
+}
+
+.menu-toggle {
+  display: grid;
+  place-items: center;
+  width: 1.5rem;
+  height: 2.5rem;
+  color: var(--text-secondary);
+}
+
+.menu-toggle app-icon {
+  width: 0.3125rem;
+  height: 1.25rem;
+}
+
+.menu {
+  position: absolute;
+  top: calc(100% + 1rem);
+  right: 0;
+  z-index: 20;
+  display: grid;
+  gap: 1rem;
+  width: 12rem;
+  padding: 1rem;
+  border-radius: var(--radius-md);
+  background-color: var(--bg-app);
+  box-shadow: 0 10px 20px rgb(54 78 126 / 25%);
+}
+
+.menu a {
+  color: var(--text-secondary);
+}
+
+.menu a:hover {
+  color: var(--text-primary);
+}
+
+.menu .danger {
+  color: var(--color-red);
+}
+
+.menu .danger:hover {
+  color: var(--color-red-hover);
+}
+
+/* ---------------------------------------------------------------- Tablet and up */
+@media (min-width: 768px) {
+  :host {
+    height: var(--header-height);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .logo {
+    width: var(--sidebar-width);
+    flex-shrink: 0;
+    padding: 0 1.5rem;
+    border-right: 1px solid var(--border);
+  }
+
+  .wordmark {
+    display: block;
+  }
+
+  .bar {
+    padding: 0 1.5rem;
+  }
+
+  .title {
+    font-size: 1.25rem;
+  }
+
+  .mobile-nav-toggle,
+  .mobile-nav,
+  .backdrop {
+    display: none;
+  }
+
+  .add-task {
+    height: 3rem;
+    padding: 0 1.5rem;
+  }
+
+  .add-task app-icon {
+    display: none;
+  }
+
+  .add-task-label {
+    display: inline;
+  }
+}
+
+/* ---------------------------------------------------------------- Desktop */
+@media (min-width: 1200px) {
+  :host {
+    height: var(--header-height-desktop);
+  }
+
+  .logo {
+    width: var(--sidebar-width-desktop);
+    padding: 0 2rem;
+  }
+
+  .bar {
+    padding: 0 2rem;
+  }
+
+  .title {
+    font-size: 1.5rem;
+    line-height: 1.875rem;
+  }
+}

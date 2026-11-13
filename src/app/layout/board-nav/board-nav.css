@@ -1,0 +1,30 @@
+:host {
+  display: block;
+}
+
+.all-boards {
+  display: block;
+  padding: 0 1.5rem 1.25rem;
+  transition: color var(--transition);
+}
+
+.all-boards:hover,
+.all-boards.active {
+  color: var(--color-purple);
+}
+
+.name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.create {
+  color: var(--color-purple);
+}
+
+@media (min-width: 1200px) {
+  .all-boards {
+    padding-left: 2rem;
+  }
+}

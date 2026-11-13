@@ -6,7 +6,7 @@ import { Task } from '../../../core/models/board.model';
   selector: 'app-task-card',
   imports: [RouterLink],
   template: `
-    <a class="card" [routerLink]="['tasks', task().id]">
+    <a class="card" [routerLink]="['tasks', task().id]" queryParamsHandling="preserve">
       <h3 class="heading-m title">{{ task().title }}</h3>
       <p class="body-m subtasks">{{ completed() }} of {{ task().subtasks.length }} subtasks</p>
     </a>

@@ -4,12 +4,14 @@ import { injectDeepestRoute } from '../../core/routing/deepest-route';
 import { BoardService } from '../../core/services/board.service';
 import { ClickOutside } from '../../shared/directives/click-outside.directive';
 import { Icon } from '../../shared/icon/icon';
+import { Menu } from '../../shared/menu/menu';
 import { BoardNav } from '../board-nav/board-nav';
+import { BoardSearch } from '../board-search/board-search';
 import { ThemeToggle } from '../theme-toggle/theme-toggle';
 
 @Component({
   selector: 'app-header',
-  imports: [RouterLink, ClickOutside, Icon, BoardNav, ThemeToggle],
+  imports: [RouterLink, ClickOutside, Icon, Menu, BoardSearch, BoardNav, ThemeToggle],
   templateUrl: './header.html',
   styleUrl: './header.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -26,6 +28,5 @@ export class Header {
 
   protected readonly title = computed(() => this.board()?.name ?? this.route().title ?? '');
 
-  protected readonly menuOpen = signal(false);
   protected readonly mobileNavOpen = signal(false);
 }

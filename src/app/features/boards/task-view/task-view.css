@@ -1,0 +1,57 @@
+.heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.description {
+  color: var(--text-secondary);
+}
+
+.subtasks {
+  display: grid;
+  gap: 0.5rem;
+  border: none;
+}
+
+.legend {
+  margin-bottom: 1rem;
+  color: var(--text-secondary);
+}
+
+.subtask {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.75rem;
+  border-radius: var(--radius-sm);
+  background-color: var(--bg-subtask);
+  cursor: pointer;
+  transition: background-color var(--transition);
+}
+
+.subtask:hover {
+  background-color: rgb(99 95 199 / 25%);
+}
+
+.subtask.done {
+  color: var(--text-secondary);
+  text-decoration: line-through;
+}
+
+.subtask input {
+  appearance: none;
+  flex-shrink: 0;
+  width: 1rem;
+  height: 1rem;
+  border: 1px solid rgb(130 143 163 / 25%);
+  border-radius: 2px;
+  background-color: var(--bg-surface);
+  cursor: pointer;
+}
+
+.subtask input:checked {
+  border-color: var(--color-purple);
+  background: var(--color-purple) url('/icons/check-white.svg') center / 0.625rem no-repeat;
+}

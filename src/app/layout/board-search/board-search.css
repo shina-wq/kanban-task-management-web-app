@@ -1,0 +1,110 @@
+/*
+  Collapsed: a round button (same size and shape as "Add New Task").
+  Expanded:  a pill-shaped search field that grows into the header.
+*/
+:host {
+  --size: 2rem;
+  --open-width: 100%; /* On mobile the header gives the open field the title's space. */
+  display: block;
+}
+
+.pill {
+  display: flex;
+  align-items: center;
+  width: var(--size);
+  height: var(--size);
+  overflow: hidden;
+  border: 1px solid transparent;
+  border-radius: var(--radius-pill);
+  background-color: var(--bg-secondary-button);
+  color: var(--color-purple);
+  transition:
+    width 200ms ease,
+    background-color var(--transition),
+    border-color var(--transition);
+}
+
+:host(:not(.expanded)) .pill:hover {
+  background-color: var(--bg-secondary-button-hover);
+}
+
+/* Same border as the form inputs: grey, purple while typing. */
+:host(.expanded) .pill {
+  width: var(--open-width);
+  border-color: rgb(130 143 163 / 25%);
+  background-color: var(--bg-input);
+}
+
+:host(.expanded) .pill:focus-within {
+  border-color: var(--color-purple);
+}
+
+.search-button,
+.clear-button {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  height: 100%;
+  color: inherit;
+}
+
+.search-button {
+  width: calc(var(--size) - 2px);
+}
+
+.search-button app-icon {
+  width: 0.875rem;
+  height: 0.875rem;
+}
+
+.field {
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+  border: none;
+  outline: none;
+  background: none;
+  color: var(--text-primary);
+  font-size: 0.8125rem;
+}
+
+.field::placeholder {
+  color: var(--text-secondary);
+}
+
+/* Hide the browser's own clear button; we have ours. */
+.field::-webkit-search-cancel-button {
+  appearance: none;
+}
+
+.clear-button {
+  width: 2rem;
+  color: var(--text-secondary);
+}
+
+.clear-button:hover {
+  color: var(--color-purple);
+}
+
+.clear-button app-icon {
+  width: 0.625rem;
+  height: 0.625rem;
+}
+
+@media (min-width: 768px) {
+  :host {
+    --size: 3rem;
+    --open-width: 13rem;
+  }
+
+  .search-button app-icon {
+    width: 1rem;
+    height: 1rem;
+  }
+}
+
+@media (min-width: 1200px) {
+  :host {
+    --open-width: 16rem;
+  }
+}

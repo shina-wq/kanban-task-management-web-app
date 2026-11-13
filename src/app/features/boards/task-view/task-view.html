@@ -1,0 +1,46 @@
+@if (found(); as found) {
+  <app-modal labelledBy="task-view-title">
+    <div class="heading">
+      <h2 id="task-view-title" class="heading-l">{{ found.task.title }}</h2>
+
+      <app-menu label="Task options">
+        <a class="menu-item" role="menuitem" routerLink="edit" queryParamsHandling="preserve">
+          Edit Task
+        </a>
+        <a class="menu-item danger" role="menuitem" routerLink="delete" queryParamsHandling="preserve">
+          Delete Task
+        </a>
+      </app-menu>
+    </div>
+
+    @if (found.task.description) {
+      <p class="body-l description">{{ found.task.description }}</p>
+    }
+
+    @if (found.task.subtasks.length) {
+      <fieldset class="subtasks">
+        <legend class="body-m legend">
+          Subtasks ({{ completedCount() }} of {{ found.task.subtasks.length }})
+        </legend>
+
+        @for (subtask of found.task.subtasks; track $index) {
+          <label class="subtask body-m" [class.done]="subtask.isCompleted">
+            <input type="checkbox" [checked]="subtask.isCompleted" (change)="toggleSubtask($index)" />
+            {{ subtask.title }}
+          </label>
+        }
+      </fieldset>
+    }
+
+    <div>
+      <label class="label" for="task-status">Current Status</label>
+      <select #status id="task-status" class="select" (change)="changeStatus(status.value)">
+        @for (column of board()?.columns; track column.id) {
+          <option [value]="column.id" [selected]="column.id === found.column.id">
+            {{ column.name }}
+          </option>
+        }
+      </select>
+    </div>
+  </app-modal>
+}

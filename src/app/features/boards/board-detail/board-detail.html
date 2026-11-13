@@ -1,7 +1,13 @@
 @if (board(); as board) {
   @if (board.columns.length) {
+    @if (isSearching()) {
+      <p class="body-m search-note" aria-live="polite">
+        Showing {{ shownTasks() }} of {{ totalTasks() }} tasks
+      </p>
+    }
+
     <div class="columns">
-      @for (column of board.columns; track column.id; let i = $index) {
+      @for (column of columns(); track column.id; let i = $index) {
         <app-board-column [column]="column" [index]="i" />
       }
 

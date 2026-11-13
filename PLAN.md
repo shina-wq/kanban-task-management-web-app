@@ -37,7 +37,7 @@ Goal: **excellent but simple** code using modern Angular.
  ├─ boards                 lazy: loadChildren → boards.routes.ts
  │   ├─ ''                 BoardsOverview
  │   ├─ new                BoardForm modal              canDeactivate
- │   └─ :boardId           BoardDetail  ?search=&sort=
+ │   └─ :boardId           BoardDetail  ?search=
  │       ├─ edit           BoardForm modal              canDeactivate
  │       ├─ delete         ConfirmDelete modal
  │       ├─ tasks/new      TaskForm modal               canDeactivate
@@ -107,16 +107,17 @@ src/app/
 - [ ] Commit (you)
 
 ### Phase 4 — Route & query params (Task 5)
-- [ ] `:boardId` drives the board shown
-- [ ] `tasks/:taskId` child route → TaskView modal
-- [ ] TaskView: subtask checkboxes + status dropdown
-- [ ] `?search=` filter and `?sort=` query params
-- [ ] Unknown board/task id → Not Found
-- [ ] Verify content updates when params change (no reload)
-- [ ] Commit
+- [x] `:boardId` drives the board shown
+- [x] `tasks/:taskId` child route → TaskView modal
+- [x] TaskView: subtask checkboxes + status dropdown
+- [x] `?search=` query param (search button in the header expands into a search field)
+- [x] Unknown board/task id → Not Found (`CanActivateFn` + `RedirectCommand`, URL kept)
+- [x] Tab titles from route resolvers (board name, task title)
+- [x] Verify content updates when params change (no reload)
+- [ ] Commit (you)
 
 ### Phase 5 — Forms, modals & programmatic navigation (Task 4)
-- [ ] Reusable modal component (closes via router navigation)
+- [x] Reusable modal component (native `<dialog>`, closes via router navigation) — done in Phase 4
 - [ ] Add/Edit Task form (title, description, subtasks list, status)
 - [ ] Add/Edit Board form (name, columns list)
 - [ ] Delete board / delete task confirm modals

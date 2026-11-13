@@ -36,6 +36,10 @@
   <!-- Board actions -->
   @if (board(); as board) {
     <div class="actions">
+      @if (board.columns.length) {
+        <app-board-search />
+      }
+
       <a
         class="btn btn-primary btn-lg add-task"
         [routerLink]="['/boards', board.id, 'tasks', 'new']"
@@ -46,34 +50,14 @@
         <span class="add-task-label">Add New Task</span>
       </a>
 
-      <div class="menu-wrap" (appClickOutside)="menuOpen.set(false)">
-        <button
-          type="button"
-          class="menu-toggle"
-          aria-label="Board options"
-          aria-haspopup="menu"
-          [attr.aria-expanded]="menuOpen()"
-          (click)="menuOpen.update((open) => !open)"
-        >
-          <app-icon name="ellipsis" />
-        </button>
-
-        @if (menuOpen()) {
-          <div class="menu" role="menu">
-            <a role="menuitem" [routerLink]="['/boards', board.id, 'edit']" (click)="menuOpen.set(false)">
-              Edit Board
-            </a>
-            <a
-              role="menuitem"
-              class="danger"
-              [routerLink]="['/boards', board.id, 'delete']"
-              (click)="menuOpen.set(false)"
-            >
-              Delete Board
-            </a>
-          </div>
-        }
-      </div>
+      <app-menu label="Board options">
+        <a class="menu-item" role="menuitem" [routerLink]="['/boards', board.id, 'edit']">
+          Edit Board
+        </a>
+        <a class="menu-item danger" role="menuitem" [routerLink]="['/boards', board.id, 'delete']">
+          Delete Board
+        </a>
+      </app-menu>
     </div>
   }
 </div>

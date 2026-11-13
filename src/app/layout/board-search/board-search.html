@@ -1,0 +1,41 @@
+<form class="pill" role="search" (submit)="$event.preventDefault()">
+  <!-- mousedown is cancelled so clicking the icon doesn't blur (and close) the field -->
+  <button
+    type="button"
+    class="search-button"
+    aria-label="Search tasks"
+    aria-controls="task-search"
+    [attr.aria-expanded]="expanded()"
+    (mousedown)="$event.preventDefault()"
+    (click)="open()"
+  >
+    <app-icon name="search" />
+  </button>
+
+  <input
+    #input
+    id="task-search"
+    class="field"
+    type="search"
+    placeholder="Search tasks"
+    aria-label="Search tasks"
+    autocomplete="off"
+    [value]="search()"
+    [attr.tabindex]="expanded() ? null : -1"
+    (input)="setSearch(input.value)"
+    (keydown.escape)="clear()"
+    (blur)="close()"
+  />
+
+  @if (search()) {
+    <button
+      type="button"
+      class="clear-button"
+      aria-label="Clear search"
+      (mousedown)="$event.preventDefault()"
+      (click)="clear()"
+    >
+      <app-icon name="cross" />
+    </button>
+  }
+</form>

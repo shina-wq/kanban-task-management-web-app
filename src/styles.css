@@ -288,6 +288,74 @@ ol {
 }
 
 /* ==========================================================================
+   Options menu items (projected into <app-menu>)
+   ========================================================================== */
+.menu-item {
+  display: block;
+  width: 100%;
+  text-align: left;
+  color: var(--text-secondary);
+  transition: color var(--transition);
+}
+
+.menu-item:hover {
+  color: var(--text-primary);
+}
+
+.menu-item.danger {
+  color: var(--color-red);
+}
+
+.menu-item.danger:hover {
+  color: var(--color-red-hover);
+}
+
+/* ==========================================================================
+   Form controls
+   ========================================================================== */
+.label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-size: 0.75rem;
+  font-weight: var(--font-bold);
+  color: var(--text-secondary);
+}
+
+.input,
+.select {
+  width: 100%;
+  height: 2.5rem;
+  padding: 0 1rem;
+  border: 1px solid rgb(130 143 163 / 25%);
+  border-radius: 0.25rem;
+  background-color: var(--bg-input);
+  font-size: 0.8125rem;
+  transition: border-color var(--transition);
+}
+
+.input::placeholder {
+  color: var(--text-primary);
+  opacity: 0.25;
+}
+
+.input:hover,
+.select:hover,
+.input:focus,
+.select:focus {
+  border-color: var(--color-purple);
+  outline: none;
+}
+
+.select {
+  appearance: none;
+  cursor: pointer;
+  background-image: url('/icons/chevron-down-purple.svg');
+  background-repeat: no-repeat;
+  background-position: right 1rem center;
+  background-size: 0.625rem;
+}
+
+/* ==========================================================================
    Utilities
    ========================================================================== */
 .sr-only {

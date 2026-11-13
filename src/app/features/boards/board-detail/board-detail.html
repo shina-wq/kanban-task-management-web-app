@@ -1,0 +1,19 @@
+@if (board(); as board) {
+  @if (board.columns.length) {
+    <div class="columns">
+      @for (column of board.columns; track column.id; let i = $index) {
+        <app-board-column [column]="column" [index]="i" />
+      }
+
+      <a class="new-column heading-xl" routerLink="edit">+ New Column</a>
+    </div>
+  } @else {
+    <div class="empty">
+      <p class="heading-l">This board is empty. Create a new column to get started.</p>
+      <a class="btn btn-primary btn-lg" routerLink="edit">+ Add New Column</a>
+    </div>
+  }
+}
+
+<!-- Child routes (task and board modals) render here, on top of the board. -->
+<router-outlet />

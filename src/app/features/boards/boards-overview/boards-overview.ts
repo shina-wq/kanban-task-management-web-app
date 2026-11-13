@@ -1,15 +1,59 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { RouterLink, RouterOutlet } from '@angular/router';
+import { BoardService } from '../../../core/services/board.service';
+import { BoardCard } from '../board-card/board-card';
 
-// Placeholder — the overview grid is built in Phase 3.
 @Component({
   selector: 'app-boards-overview',
-  template: `<p class="body-l placeholder">All boards — coming in Phase 3.</p>`,
+  imports: [RouterLink, RouterOutlet, BoardCard],
+  template: `
+    <ul class="grid">
+      @for (board of boards(); track board.id) {
+        <li><app-board-card [board]="board" /></li>
+      }
+      <li>
+        <a class="new-board heading-l" routerLink="new">+ Create New Board</a>
+      </li>
+    </ul>
+
+    <!-- The "new board" modal renders here. -->
+    <router-outlet />
+  `,
   styles: `
-    .placeholder {
-      padding: 1.5rem;
+    :host {
+      display: block;
+      padding: 1.5rem 1rem;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr));
+      gap: 1.5rem;
+    }
+
+    .new-board {
+      display: grid;
+      place-items: center;
+      height: 100%;
+      min-height: 10rem;
+      border-radius: var(--radius-md);
+      background: var(--bg-new-column);
       color: var(--text-secondary);
+      transition: color var(--transition);
+    }
+
+    .new-board:hover {
+      color: var(--color-purple);
+    }
+
+    @media (min-width: 768px) {
+      :host {
+        padding: 1.5rem;
+      }
     }
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BoardsOverview {}
+export class BoardsOverview {
+  protected readonly boards = inject(BoardService).boards;
+}

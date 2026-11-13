@@ -1,18 +1,20 @@
-import { ChangeDetectionStrategy, Component, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, input } from '@angular/core';
+import { RouterLink, RouterOutlet } from '@angular/router';
+import { BoardService } from '../../../core/services/board.service';
+import { BoardColumn } from '../board-column/board-column';
 
-// Placeholder — columns and task cards are built in Phase 3.
 @Component({
   selector: 'app-board-detail',
-  template: `<p class="body-l placeholder">Board "{{ boardId() }}" — coming in Phase 3.</p>`,
-  styles: `
-    .placeholder {
-      padding: 1.5rem;
-      color: var(--text-secondary);
-    }
-  `,
+  imports: [RouterLink, RouterOutlet, BoardColumn],
+  templateUrl: './board-detail.html',
+  styleUrl: './board-detail.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BoardDetail {
+  private readonly boardService = inject(BoardService);
+
   /** Bound from the `:boardId` route param (withComponentInputBinding). */
   readonly boardId = input.required<string>();
+
+  protected readonly board = computed(() => this.boardService.getBoard(this.boardId()));
 }

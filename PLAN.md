@@ -99,12 +99,12 @@ src/app/
 - [ ] Commit (you)
 
 ### Phase 3 — Boards feature, lazy-loaded (Task 6)
-- [ ] `boards.routes.ts` loaded via `loadChildren`
-- [ ] Boards overview page (cards for all boards)
-- [ ] Board detail: columns + task cards ("x of y subtasks")
-- [ ] Empty board state ("This board is empty…")
-- [ ] Confirm separate lazy chunk in build output
-- [ ] Commit
+- [x] `boards.routes.ts` loaded via `loadChildren`
+- [x] Boards overview page (cards for all boards)
+- [x] Board detail: columns + task cards ("x of y subtasks")
+- [x] Empty board state ("This board is empty…")
+- [x] Confirm separate lazy chunk in build output (`boards-routes`, loaded only on first visit)
+- [ ] Commit (you)
 
 ### Phase 4 — Route & query params (Task 5)
 - [ ] `:boardId` drives the board shown

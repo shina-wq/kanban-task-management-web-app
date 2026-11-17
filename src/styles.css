@@ -432,7 +432,7 @@ textarea.input {
    Drag and drop (Angular CDK). The preview is attached to <body>, so it is styled globally.
    ========================================================================== */
 .cdk-drag-preview {
-  border-radius: 0.75rem;
+  border-radius: var(--radius-md);
   box-shadow: 0 12px 24px rgb(54 78 126 / 30%);
   rotate: 2deg;
   cursor: grabbing;

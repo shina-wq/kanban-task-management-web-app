@@ -66,7 +66,7 @@ export interface TaskDrop {
     .tasks {
       display: flex;
       flex-direction: column;
-      gap: 0.75rem;
+      gap: 1.25rem;
       flex: 1;
       min-height: 6rem;
     }
@@ -76,7 +76,7 @@ export interface TaskDrop {
       content: '';
       height: 6rem;
       border: 2px dashed var(--border);
-      border-radius: 0.75rem;
+      border-radius: var(--radius-md);
     }
 
     /* While a card hovers over an empty column, the drag placeholder shows instead. */
@@ -85,9 +85,9 @@ export interface TaskDrop {
     }
 
     .placeholder {
-      min-height: 4.5rem;
+      min-height: 5.5rem;
       border: 2px dashed var(--color-purple);
-      border-radius: 0.75rem;
+      border-radius: var(--radius-md);
       background-color: var(--bg-secondary-button);
     }
 

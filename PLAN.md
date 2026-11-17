@@ -26,7 +26,7 @@ Goal: **excellent but simple** code using modern Angular.
 | Lifecycle hooks        | `ngOnInit`, `DestroyRef` / `ngOnDestroy`, `afterNextRender`                          |
 | Change detection       | `OnPush` everywhere, signals + `computed()`                                          |
 | Services & DI          | `BoardService`, `ThemeService`, `AuthService` via `inject()`                         |
-| Routing                | Lazy loading, child routes, params, query params, guards, preloading (no aux routes) |
+| Routing                | Lazy loading, child routes, params, query params, guards                             |
 
 ## Route map
 
@@ -52,9 +52,9 @@ Goal: **excellent but simple** code using modern Angular.
 
 ```
 src/app/
-  core/        models, services, guards, preloading strategy
+  core/        models, services, guards
   shared/      modal, button, dropdown, clickOutside directive
-  layout/      shell, sidebar, header, loading bar, toast
+  layout/      shell, sidebar, header, toast
   features/
     auth/      login
     boards/    boards.routes.ts + board/task components
@@ -97,7 +97,7 @@ src/app/
 - [x] Mobile: sidebar becomes header dropdown
 - [x] `appClickOutside` directive
 - [x] Not Found page (`**`)
-- [x] Page titles via custom `TitleStrategy` ("Settings | Kanban")
+- [x] Page titles via the route `title` property
 - [x] Verify navigation without page reloads
 - [ ] Commit (you)
 
@@ -117,7 +117,6 @@ src/app/
 - [x] TaskView: subtask checkboxes + status dropdown
 - [x] `?search=` query param (search button in the header expands into a search field)
 - [x] Unknown board/task id → Not Found (`CanActivateFn` + `RedirectCommand`, URL kept)
-- [x] Tab titles from route resolvers (board name, task title)
 - [x] Verify content updates when params change (no reload)
 - [ ] Commit (you)
 
@@ -147,7 +146,7 @@ src/app/
 
 - [x] Login page
 - [x] `authGuard` (`CanActivateFn`) → `/login?returnUrl=…`
-- [x] Redirect back to `returnUrl` after login (only in-app paths are followed)
+- [x] Redirect back to `returnUrl` after login
 - [x] `guestGuard`: logged-in users visiting /login go to /boards
 - [x] `unsavedChangesGuard` (`CanDeactivateFn`) on all forms (Escape, backdrop, links and browser Back)
 - [x] `canceledNavigationResolution: 'computed'` keeps the URL right when Back is cancelled
@@ -156,9 +155,6 @@ src/app/
 
 ### Phase 8 — Advanced routing (Tasks 4 & 6)
 
-- [x] Loading bar from Router events (Start / End / Cancel / Error)
-- [x] Navigation error handling (`withNavigationErrorHandler` → toast with Retry)
-- [x] Custom preloading strategy (`data: { preload: true }` on boards; settings loads on demand)
 - [x] Auxiliary routes: not implemented (the lab only asks to discuss them; the Tips panel demo was removed)
 - [ ] Commit (you)
 

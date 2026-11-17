@@ -3,7 +3,7 @@ import { unsavedChangesGuard } from '../../core/guards/unsaved-changes.guard';
 import { BoardDetail } from './board-detail/board-detail';
 import { BoardForm } from './board-form/board-form';
 import { BoardsOverview } from './boards-overview/boards-overview';
-import { boardExistsGuard, boardTitle, taskExistsGuard, taskTitle } from './boards.guards';
+import { boardExistsGuard, taskExistsGuard } from './boards.guards';
 import { DeleteConfirm } from './delete-confirm/delete-confirm';
 import { TaskForm } from './task-form/task-form';
 import { TaskView } from './task-view/task-view';
@@ -32,7 +32,7 @@ export default [
     // /boards/:boardId?search=…
     path: ':boardId',
     component: BoardDetail,
-    title: boardTitle,
+    title: 'Board',
     canActivate: [boardExistsGuard],
     children: [
       {
@@ -52,7 +52,7 @@ export default [
         path: 'tasks/:taskId',
         canActivate: [taskExistsGuard],
         children: [
-          { path: '', component: TaskView, title: taskTitle },
+          { path: '', component: TaskView, title: 'Task' },
           {
             path: 'edit',
             component: TaskForm,

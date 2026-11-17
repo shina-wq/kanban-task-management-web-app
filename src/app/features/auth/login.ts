@@ -33,11 +33,7 @@ export default class Login {
 
     this.auth.login(this.name);
     // Programmatic navigation back to where the user was going.
-    this.router.navigateByUrl(safeReturnUrl(this.returnUrl()));
+    // navigateByUrl only navigates inside the app, so any returnUrl is safe here.
+    this.router.navigateByUrl(this.returnUrl() ?? '/boards');
   }
-}
-
-/** Only follow in-app paths, never another site (e.g. "//evil.com"). */
-function safeReturnUrl(url: string | undefined): string {
-  return url?.startsWith('/') && !url.startsWith('//') ? url : '/boards';
 }

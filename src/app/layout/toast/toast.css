@@ -18,11 +18,7 @@
   animation: toast-in 200ms ease-out;
 }
 
-.toast.error {
-  --accent: var(--color-red);
-}
-
-/* Round colored badge with a check (success) or cross (error). */
+/* Round colored badge with a check. */
 .badge {
   display: grid;
   place-items: center;

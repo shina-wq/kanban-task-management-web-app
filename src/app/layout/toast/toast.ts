@@ -9,22 +9,12 @@ import { Icon } from '../../shared/icon/icon';
   template: `
     <!-- @for keyed by id: each new toast gets a fresh element, so it animates in again. -->
     @for (toast of toasts(); track toast.id) {
-      <div
-        class="toast"
-        [class.error]="toast.tone === 'error'"
-        [attr.role]="toast.tone === 'error' ? 'alert' : 'status'"
-      >
+      <div class="toast" role="status">
         <span class="badge" aria-hidden="true">
-          <app-icon [name]="toast.tone === 'error' ? 'cross' : 'check'" />
+          <app-icon name="check" />
         </span>
 
         <p class="heading-m message">{{ toast.message }}</p>
-
-        @if (toast.action; as action) {
-          <button type="button" class="btn btn-secondary" (click)="action.run(); service.dismiss()">
-            {{ action.label }}
-          </button>
-        }
 
         <button type="button" class="close" aria-label="Dismiss" (click)="service.dismiss()">
           <app-icon name="cross" />

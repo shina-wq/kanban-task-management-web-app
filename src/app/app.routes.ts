@@ -20,12 +20,9 @@ export const routes: Routes = [
       { path: '', pathMatch: 'full', redirectTo: 'boards' },
       {
         path: 'boards',
-        // Most visits end up here, so download it in the background (SelectivePreloadingStrategy).
-        data: { preload: true },
         loadChildren: () => import('./features/boards/boards.routes'),
       },
       {
-        // Not preloaded: loads only when someone opens Settings.
         path: 'settings',
         title: 'Settings',
         canDeactivate: [unsavedChangesGuard],

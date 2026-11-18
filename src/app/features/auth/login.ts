@@ -4,11 +4,7 @@ import { Router } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
 import { Icon } from '../../shared/icon/icon';
 
-/**
- * /login?returnUrl=… — fake login: any display name gets you in.
- * No theme toggle here: ThemeService (created at app startup) already applies
- * the saved theme, or the system's light/dark setting on a first visit.
- */
+
 @Component({
   selector: 'app-login',
   imports: [FormsModule, Icon],
@@ -32,8 +28,7 @@ export default class Login {
     }
 
     this.auth.login(this.name);
-    // Programmatic navigation back to where the user was going.
-    // navigateByUrl only navigates inside the app, so any returnUrl is safe here.
+
     this.router.navigateByUrl(this.returnUrl() ?? '/boards');
   }
 }

@@ -7,20 +7,14 @@ import { readJson, removeItem, writeJson } from '../utils/storage';
 const STORAGE_KEY = 'kanban.boards';
 const SEED_BOARDS: Board[] = seedData.boards;
 
-/**
- * Single source of truth for boards, columns and tasks.
- *
- * State lives in a private signal and is exposed read-only. Every change goes
- * through `update()`, which works on a copy, swaps the signal value (so OnPush
- * components and computed signals react) and saves to localStorage.
- */
+// Single source of truth for boards, columns and tasks.
 @Injectable({ providedIn: 'root' })
 export class BoardService {
   private readonly state = signal<Board[]>(readJson(STORAGE_KEY, structuredClone(SEED_BOARDS)));
 
   readonly boards = this.state.asReadonly();
 
-  // ---------------------------------------------------------------- Queries
+  // Queries
 
   getBoard(boardId: string): Board | undefined {
     return this.state().find((board) => board.id === boardId);
@@ -30,7 +24,7 @@ export class BoardService {
     return this.locate(this.state(), boardId, taskId);
   }
 
-  // ----------------------------------------------------------------- Boards
+  // Boards
 
   createBoard(draft: BoardDraft): Board {
     const board: Board = {
@@ -45,7 +39,7 @@ export class BoardService {
     return board;
   }
 
-  /** Keeps tasks in columns that still exist; removed columns take their tasks with them. */
+  // Keeps tasks in columns that still exist; removed columns take their tasks with them.
   updateBoard(boardId: string, draft: BoardDraft): void {
     this.update((boards) => {
       const board = boards.find((b) => b.id === boardId);
@@ -67,7 +61,7 @@ export class BoardService {
     });
   }
 
-  // ------------------------------------------------------------------ Tasks
+  // Tasks
 
   createTask(boardId: string, draft: TaskDraft): Task {
     const task: Task = { id: createId(), ...this.cleanTask(draft) };
@@ -116,7 +110,7 @@ export class BoardService {
     this.state.set(structuredClone(SEED_BOARDS));
   }
 
-  // ---------------------------------------------------------------- Helpers
+  // Helpers
 
   private update(change: (boards: Board[]) => void): void {
     const next = structuredClone(this.state());

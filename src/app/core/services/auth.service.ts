@@ -7,11 +7,8 @@ export interface User {
 
 const STORAGE_KEY = 'kanban.user';
 
-/**
- * Fake authentication for the routing lab: any display name "logs in".
- * There is no password or server — it only exists so guards have
- * something real to check.
- */
+// Fake authentication: any display name "logs in".
+// There is no password or server
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   private readonly currentUser = signal<User | null>(readJson<User | null>(STORAGE_KEY, null));

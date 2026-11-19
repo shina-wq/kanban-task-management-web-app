@@ -4,6 +4,16 @@ import { Board, BoardDraft, Task, TaskDraft, TaskLocation } from '../models/boar
 import { createId, createSlug } from '../utils/id';
 import { readJson, removeItem, writeJson } from '../utils/storage';
 
+/** A change that can't be made, e.g. the task was deleted meanwhile. The message is for the user. */
+export class BoardError extends Error {
+  override readonly name = 'BoardError';
+}
+
+/** A message to show the user for an error thrown while saving. */
+export function saveErrorMessage(error: unknown): string {
+  return error instanceof BoardError ? error.message : 'Something went wrong. Please try again.';
+}
+
 const STORAGE_KEY = 'kanban.boards';
 const SEED_BOARDS: Board[] = seedData.boards;
 
@@ -71,22 +81,35 @@ export class BoardService {
 
   // Tasks
 
+  /** Adds a task to the chosen column. Throws a BoardError if that column no longer exists. */
   createTask(boardId: string, draft: TaskDraft): Task {
+    this.assertColumnExists(boardId, draft.columnId);
+
     const task: Task = { id: createId(), ...this.cleanTask(draft) };
-    this.update((boards) => {
-      const column = this.columnIn(boards, boardId, draft.columnId);
-      column?.tasks.push(task);
-    });
+    this.update((boards) => this.columnIn(boards, boardId, draft.columnId)?.tasks.push(task));
     return task;
   }
 
-  /** Saves the task's fields and moves it if its status (column) changed. */
+  /**
+   * Saves the task's fields. If its status (column) changed, moves it to the end of the
+   * new column; otherwise it keeps its place. Throws a BoardError if the task or the
+   * chosen column no longer exists — checked first, so a failed save changes nothing.
+   */
   updateTask(boardId: string, taskId: string, draft: TaskDraft): void {
+    if (!this.findTask(boardId, taskId)) {
+      throw new BoardError('This task no longer exists.');
+    }
+    this.assertColumnExists(boardId, draft.columnId);
+
     this.update((boards) => {
-      const task = this.removeTask(boards, boardId, taskId);
-      if (!task) return;
-      Object.assign(task, this.cleanTask(draft));
-      this.columnIn(boards, boardId, draft.columnId)?.tasks.push(task);
+      const found = this.locate(boards, boardId, taskId);
+      if (!found) return;
+      Object.assign(found.task, this.cleanTask(draft));
+
+      if (found.column.id !== draft.columnId) {
+        this.removeTask(boards, boardId, taskId);
+        this.columnIn(boards, boardId, draft.columnId)?.tasks.push(found.task);
+      }
     });
   }
 
@@ -125,6 +148,12 @@ export class BoardService {
     change(next);
     this.state.set(next);
     writeJson(STORAGE_KEY, next);
+  }
+
+  private assertColumnExists(boardId: string, columnId: string): void {
+    if (!this.columnIn(this.state(), boardId, columnId)) {
+      throw new BoardError('That status no longer exists. Pick another one.');
+    }
   }
 
   private columnIn(boards: Board[], boardId: string, columnId: string) {

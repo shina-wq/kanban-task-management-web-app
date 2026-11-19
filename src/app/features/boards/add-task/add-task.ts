@@ -9,7 +9,7 @@ import {
 import { Router } from '@angular/router';
 import { HasUnsavedChanges } from '../../../core/guards/unsaved-changes.guard';
 import { TaskDraft } from '../../../core/models/board.model';
-import { BoardService } from '../../../core/services/board.service';
+import { BoardService, saveErrorMessage } from '../../../core/services/board.service';
 import { ToastService } from '../../../core/services/toast.service';
 import { Modal } from '../../../shared/modal/modal';
 import { TaskForm } from '../task-form/task-form';
@@ -60,8 +60,16 @@ export class AddTask implements HasUnsavedChanges {
     dueDate: '',
   }));
 
+  /** Saves the task. On failure, explain why and keep the modal open with the user's input. */
   protected create(draft: TaskDraft): void {
-    this.boardService.createTask(this.boardId(), draft);
+    try {
+      this.boardService.createTask(this.boardId(), draft);
+    } catch (error) {
+      this.toast.error(saveErrorMessage(error));
+      return;
+    }
+
+    this.form()?.markAsSaved(draft);
     this.toast.success('Task created');
     this.router.navigate(['/boards', this.boardId()], { queryParamsHandling: 'preserve' });
   }

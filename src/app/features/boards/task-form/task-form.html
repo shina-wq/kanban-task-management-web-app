@@ -49,6 +49,7 @@
         <div class="control">
           <input
             class="input"
+            [id]="'subtask-' + i"
             [attr.aria-label]="'Subtask ' + (i + 1)"
             [placeholder]="i === 0 ? 'e.g. Make coffee' : 'e.g. Drink coffee & smile'"
             formControlName="title"

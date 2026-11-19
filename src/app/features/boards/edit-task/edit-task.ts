@@ -4,12 +4,13 @@ import {
   computed,
   inject,
   input,
+  untracked,
   viewChild,
 } from '@angular/core';
 import { Router } from '@angular/router';
 import { HasUnsavedChanges } from '../../../core/guards/unsaved-changes.guard';
 import { TaskDraft } from '../../../core/models/board.model';
-import { BoardService } from '../../../core/services/board.service';
+import { BoardService, saveErrorMessage } from '../../../core/services/board.service';
 import { ToastService } from '../../../core/services/toast.service';
 import { Modal } from '../../../shared/modal/modal';
 import { TaskForm } from '../task-form/task-form';
@@ -53,9 +54,15 @@ export class EditTask implements HasUnsavedChanges {
     () => this.boardService.getBoard(this.boardId())?.columns ?? [],
   );
 
-  /** The task's current values; its status is the column it's in. */
+  /**
+   * The task's values when the form opened; its status is the column it's in.
+   * Read untracked: if the task changes or is deleted elsewhere meanwhile, the form keeps
+   * the user's input (and saving explains what happened) instead of disappearing.
+   */
   protected readonly initialValue = computed<TaskDraft | undefined>(() => {
-    const found = this.boardService.findTask(this.boardId(), this.taskId());
+    const boardId = this.boardId();
+    const taskId = this.taskId();
+    const found = untracked(() => this.boardService.findTask(boardId, taskId));
     if (!found) return undefined;
     const { task, column } = found;
     return {
@@ -67,8 +74,16 @@ export class EditTask implements HasUnsavedChanges {
     };
   });
 
+  /** Saves the task. On failure, explain why and keep the modal open with the user's input. */
   protected update(draft: TaskDraft): void {
-    this.boardService.updateTask(this.boardId(), this.taskId(), draft);
+    try {
+      this.boardService.updateTask(this.boardId(), this.taskId(), draft);
+    } catch (error) {
+      this.toast.error(saveErrorMessage(error));
+      return;
+    }
+
+    this.form()?.markAsSaved(draft);
     this.toast.success('Task updated');
     this.router.navigate(['/boards', this.boardId()], { queryParamsHandling: 'preserve' });
   }

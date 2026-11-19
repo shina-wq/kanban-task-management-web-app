@@ -1,4 +1,12 @@
-import { ChangeDetectionStrategy, Component, OnInit, inject, input, output } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  ElementRef,
+  OnInit,
+  inject,
+  input,
+  output,
+} from '@angular/core';
 import {
   AbstractControl,
   FormControl,
@@ -30,7 +38,8 @@ type SubtaskGroup = FormGroup<{
  * Shared task form used by AddTask and EditTask (reactive form).
  * It only collects and validates input: the parent gives it the starting
  * values, the statuses and the titles already used on the board, and gets
- * the result through (submitted).
+ * the result through (submitted). The parent saves it and, if that worked,
+ * calls markAsSaved(); if it failed, the form keeps the user's input.
  *
  * <app-task-form [initialValue]="draft" [statuses]="columns" [takenTitles]="titles"
  *                submitLabel="Create Task" (submitted)="save($event)" />
@@ -43,6 +52,7 @@ type SubtaskGroup = FormGroup<{
 })
 export class TaskForm implements OnInit {
   private readonly fb = inject(NonNullableFormBuilder);
+  private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
 
   /** Values the form starts with (empty task, or the task being edited). */
   readonly initialValue = input.required<TaskDraft>();
@@ -52,7 +62,7 @@ export class TaskForm implements OnInit {
   readonly takenTitles = input<readonly string[]>([]);
   readonly submitLabel = input.required<string>();
 
-  /** Emits the form value when a valid form is submitted. */
+  /** Emits the form value when a valid form is submitted (it isn't saved yet). */
   readonly submitted = output<TaskDraft>();
 
   protected readonly limits = TASK_LIMITS;
@@ -124,13 +134,41 @@ export class TaskForm implements OnInit {
     this.subtasks.markAsDirty();
   }
 
+  /**
+   * Called by the parent once the task was saved: resets the form to the saved
+   * values, so it's pristine and untouched again and the unsaved-changes guard
+   * doesn't ask on the way out.
+   */
+  markAsSaved(saved: TaskDraft): void {
+    this.form.reset(saved);
+  }
+
   protected submit(): void {
     if (this.form.invalid) {
-      this.form.markAllAsTouched(); // Show every error message.
+      this.form.markAllAsTouched(); // Show every error message…
+      this.focusFirstInvalid(); // …and take the user to the first one.
       return;
     }
     this.submitted.emit(this.form.getRawValue());
-    this.form.markAsPristine(); // Saved: the unsaved-changes guard shouldn't ask anymore.
+  }
+
+  /** Field ids in the order they appear in the form. */
+  private firstInvalidId(): string | null {
+    const { title, description, subtasks, dueDate } = this.form.controls;
+    if (title.invalid) return 'task-title';
+    if (description.invalid) return 'task-description';
+
+    const repeats: number[] = subtasks.errors?.['duplicateItems'] ?? [];
+    const row = subtasks.controls.findIndex((group, i) => group.invalid || repeats.includes(i));
+    if (row !== -1) return `subtask-${row}`;
+
+    if (dueDate.invalid) return 'task-due-date';
+    return null;
+  }
+
+  private focusFirstInvalid(): void {
+    const id = this.firstInvalidId();
+    if (id) this.host.nativeElement.querySelector<HTMLElement>(`#${id}`)?.focus();
   }
 
   private subtaskGroup(subtask: Subtask = { title: '', isCompleted: false }): SubtaskGroup {

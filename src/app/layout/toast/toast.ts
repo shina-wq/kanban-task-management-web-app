@@ -1,17 +1,45 @@
-import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  Directive,
+  ElementRef,
+  afterNextRender,
+  computed,
+  inject,
+} from '@angular/core';
 import { ToastService } from '../../core/services/toast.service';
 import { Icon } from '../../shared/icon/icon';
+
+/**
+ * Opens a [popover] element as soon as it's rendered. Popovers go in the browser's
+ * top layer, above an open modal <dialog>, so a toast is visible even while a form is open
+ * (z-index alone can't put anything above a modal dialog).
+ */
+@Directive({ selector: '[appShowPopover]', host: { popover: 'manual' } })
+export class ShowPopover {
+  private readonly element = inject<ElementRef<HTMLElement>>(ElementRef);
+
+  constructor() {
+    afterNextRender(() => this.element.nativeElement.showPopover());
+  }
+}
 
 /** Shows the current toast from ToastService at the bottom of the screen. */
 @Component({
   selector: 'app-toast',
-  imports: [Icon],
+  imports: [Icon, ShowPopover],
   template: `
     <!-- @for keyed by id: each new toast gets a fresh element, so it animates in again. -->
     @for (toast of toasts(); track toast.id) {
-      <div class="toast" role="status">
+      <!-- Errors use role="alert" so screen readers announce them right away. -->
+      <div
+        appShowPopover
+        class="toast"
+        [class.toast-error]="toast.kind === 'error'"
+        [attr.role]="toast.kind === 'error' ? 'alert' : 'status'"
+      >
         <span class="badge" aria-hidden="true">
-          <app-icon name="check" />
+          <app-icon [name]="toast.kind === 'error' ? 'cross' : 'check'" />
         </span>
 
         <p class="heading-m message">{{ toast.message }}</p>

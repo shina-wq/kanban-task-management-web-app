@@ -2,9 +2,11 @@
   --accent: var(--color-purple);
 
   position: fixed;
-  bottom: 1.5rem;
-  left: 50%;
-  z-index: 100;
+  inset: auto auto 1.5rem 50%; /* Bottom center (overrides the popover's default centering). */
+  margin: 0;
+  border: none;
+  color: inherit;
+  overflow: visible;
   display: flex;
   align-items: center;
   gap: 1rem;
@@ -18,7 +20,11 @@
   animation: toast-in 200ms ease-out;
 }
 
-/* Round colored badge with a check. */
+.toast-error {
+  --accent: var(--color-red);
+}
+
+/* Round colored badge with a check (or a cross for errors). */
 .badge {
   display: grid;
   place-items: center;

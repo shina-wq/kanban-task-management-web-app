@@ -1,6 +1,7 @@
 import { Injectable, signal } from '@angular/core';
 import seedData from '../data/seed-data.json';
 import { Board, BoardDraft, Task, TaskDraft, TaskLocation } from '../models/board.model';
+import { isoDate } from '../utils/dates';
 import { createId, createSlug } from '../utils/id';
 import { readJson, removeItem, writeJson } from '../utils/storage';
 
@@ -15,12 +16,29 @@ export function saveErrorMessage(error: unknown): string {
 }
 
 const STORAGE_KEY = 'kanban.boards';
-const SEED_BOARDS: Board[] = seedData.boards;
+
+/**
+ * The sample boards. Due dates are stored as days from today ("dueInDays": -2) and turned
+ * into real dates here, so the samples always show a mix of overdue, today and upcoming.
+ */
+function sampleBoards(): Board[] {
+  return seedData.boards.map((board) => ({
+    ...board,
+    columns: board.columns.map((column) => ({
+      ...column,
+      tasks: column.tasks.map(({ dueInDays, subtasks, ...task }) => ({
+        ...task,
+        subtasks: subtasks.map((subtask) => ({ ...subtask })),
+        dueDate: isoDate(dueInDays),
+      })),
+    })),
+  }));
+}
 
 // Single source of truth for boards, columns and tasks.
 @Injectable({ providedIn: 'root' })
 export class BoardService {
-  private readonly state = signal<Board[]>(readJson(STORAGE_KEY, structuredClone(SEED_BOARDS)));
+  private readonly state = signal<Board[]>(readJson(STORAGE_KEY, sampleBoards()));
 
   readonly boards = this.state.asReadonly();
 
@@ -138,7 +156,7 @@ export class BoardService {
   /** Restores the sample boards. */
   reset(): void {
     removeItem(STORAGE_KEY);
-    this.state.set(structuredClone(SEED_BOARDS));
+    this.state.set(sampleBoards());
   }
 
   // Helpers

@@ -12,7 +12,10 @@ import { DueDate } from '../../../shared/due-date/due-date';
       <div class="meta">
         <p class="body-m subtasks">{{ completed() }} of {{ task().subtasks.length }} subtasks</p>
         @if (task().dueDate; as dueDate) {
-          <app-due-date [date]="dueDate" />
+          <app-due-date
+            [date]="dueDate"
+            [completed]="task().subtasks.length > 0 && completed() === task().subtasks.length"
+          />
         }
       </div>
     </a>

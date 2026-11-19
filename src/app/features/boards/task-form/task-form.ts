@@ -21,9 +21,9 @@ import {
   noDuplicateItems,
   notBlank,
   notInPast,
-  todayIso,
   uniqueAmong,
 } from '../../../core/validators/task.validators';
+import { todayIso } from '../../../core/utils/dates';
 import { errorMessage } from '../../../core/validators/validation-messages';
 import { Icon } from '../../../shared/icon/icon';
 

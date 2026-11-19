@@ -1,4 +1,5 @@
 import { FormArray, ValidatorFn } from '@angular/forms';
+import { todayIso } from '../utils/dates';
 
 /** Compare names the way a person would: ignore case and surrounding spaces. */
 const normalize = (value: string): string => value.trim().toLowerCase();
@@ -67,12 +68,4 @@ export function notInPast(getAllowed: () => string = () => ''): ValidatorFn {
  */
 export function completeDate(isIncomplete: () => boolean): ValidatorFn {
   return () => (isIncomplete() ? { incompleteDate: true } : null);
-}
-
-/** Today's local date as an ISO string, e.g. "2026-11-19". */
-export function todayIso(): string {
-  const now = new Date();
-  const month = String(now.getMonth() + 1).padStart(2, '0');
-  const day = String(now.getDate()).padStart(2, '0');
-  return `${now.getFullYear()}-${month}-${day}`;
 }

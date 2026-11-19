@@ -1,13 +1,15 @@
 import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
-import { todayIso } from '../../core/validators/task.validators';
+import { todayIso } from '../../core/utils/dates';
 
-type DueState = 'overdue' | 'today' | 'upcoming';
+/** 'plain' is a future date, or any date of a completed task. */
+type DueState = 'overdue' | 'today' | 'plain';
 
 /**
  * A task's due date, e.g. "Due Mar 15", "Due today" or "Overdue · Mar 1".
  * The state is in the words too, not only the color, so it's clear to everyone.
+ * A completed task is never overdue: it just shows its date.
  *
- * <app-due-date [date]="task.dueDate" />
+ * <app-due-date [date]="task.dueDate" [completed]="allSubtasksDone" />
  */
 @Component({
   selector: 'app-due-date',
@@ -39,11 +41,14 @@ type DueState = 'overdue' | 'today' | 'upcoming';
 export class DueDate {
   /** ISO date, e.g. "2026-12-31". */
   readonly date = input.required<string>();
+  /** True when the task is finished (all its subtasks are done). */
+  readonly completed = input(false);
 
   protected readonly state = computed<DueState>(() => {
     const today = todayIso();
+    if (this.completed()) return 'plain';
     if (this.date() < today) return 'overdue';
-    return this.date() === today ? 'today' : 'upcoming';
+    return this.date() === today ? 'today' : 'plain';
   });
 
   protected readonly label = computed(() => {

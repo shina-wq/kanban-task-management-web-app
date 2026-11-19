@@ -1,13 +1,14 @@
 import { ChangeDetectionStrategy, Component, computed, inject, input } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { BoardService } from '../../../core/services/board.service';
+import { DueDate } from '../../../shared/due-date/due-date';
 import { Menu } from '../../../shared/menu/menu';
 import { Modal } from '../../../shared/modal/modal';
 
 /** Task details modal: /boards/:boardId/tasks/:taskId */
 @Component({
   selector: 'app-task-view',
-  imports: [RouterLink, Menu, Modal],
+  imports: [RouterLink, Menu, Modal, DueDate],
   templateUrl: './task-view.html',
   styleUrl: './task-view.css',
   changeDetection: ChangeDetectionStrategy.OnPush,

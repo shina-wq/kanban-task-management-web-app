@@ -1,14 +1,20 @@
 import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { Task } from '../../../core/models/board.model';
+import { DueDate } from '../../../shared/due-date/due-date';
 
 @Component({
   selector: 'app-task-card',
-  imports: [RouterLink],
+  imports: [RouterLink, DueDate],
   template: `
     <a class="card" [routerLink]="['tasks', task().id]" queryParamsHandling="preserve">
       <h3 class="heading-m title">{{ task().title }}</h3>
-      <p class="body-m subtasks">{{ completed() }} of {{ task().subtasks.length }} subtasks</p>
+      <div class="meta">
+        <p class="body-m subtasks">{{ completed() }} of {{ task().subtasks.length }} subtasks</p>
+        @if (task().dueDate; as dueDate) {
+          <app-due-date [date]="dueDate" />
+        }
+      </div>
     </a>
   `,
   styles: `
@@ -28,6 +34,14 @@ import { Task } from '../../../core/models/board.model';
 
     .card:hover .title {
       color: var(--color-purple);
+    }
+
+    .meta {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.5rem;
     }
 
     .subtasks {

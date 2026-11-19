@@ -48,6 +48,8 @@ type SubtaskGroup = FormGroup<{
   selector: 'app-task-form',
   imports: [ReactiveFormsModule, Icon],
   templateUrl: './task-form.html',
+  // The unsaved-changes guard covers in-app navigation; this covers reload / closing the tab.
+  host: { '(window:beforeunload)': 'warnBeforeUnload($event)' },
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TaskForm implements OnInit {
@@ -132,6 +134,11 @@ export class TaskForm implements OnInit {
   protected removeSubtask(index: number): void {
     this.subtasks.removeAt(index);
     this.subtasks.markAsDirty();
+  }
+
+  /** Makes the browser ask "Leave site?" when the page is reloaded or closed with unsaved changes. */
+  protected warnBeforeUnload(event: BeforeUnloadEvent): void {
+    if (this.form.dirty) event.preventDefault();
   }
 
   /**

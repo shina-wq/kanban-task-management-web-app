@@ -8,6 +8,7 @@
         class="input"
         placeholder="e.g. Take coffee break"
         formControlName="title"
+        aria-required="true"
         [attr.aria-invalid]="!!titleError"
         [attr.aria-describedby]="titleError ? 'task-title-error' : null"
       />
@@ -27,11 +28,15 @@
         placeholder="e.g. It's always good to take a break. This 15 minute break will recharge the batteries a little."
         formControlName="description"
         [attr.aria-invalid]="!!descriptionError"
-        aria-describedby="task-description-count"
+        [attr.aria-describedby]="
+          descriptionError
+            ? 'task-description-error task-description-count'
+            : 'task-description-count'
+        "
       ></textarea>
       <div class="control-footer">
         @if (descriptionError) {
-          <span class="error">{{ descriptionError }}</span>
+          <span id="task-description-error" class="error">{{ descriptionError }}</span>
         }
         <span id="task-description-count" class="counter">
           {{ form.controls.description.value.length }}/{{ limits.description }}
@@ -53,6 +58,7 @@
             [attr.aria-label]="'Subtask ' + (i + 1)"
             [placeholder]="i === 0 ? 'e.g. Make coffee' : 'e.g. Drink coffee & smile'"
             formControlName="title"
+            aria-required="true"
             [attr.aria-invalid]="!!rowError"
             [attr.aria-describedby]="rowError ? 'subtask-error-' + i : null"
           />
@@ -78,7 +84,7 @@
 
   <div>
     <label class="label" for="task-status">Status</label>
-    <select id="task-status" class="select" formControlName="columnId">
+    <select id="task-status" class="select" formControlName="columnId" aria-required="true">
       @for (column of statuses(); track column.id) {
         <option [value]="column.id">{{ column.name }}</option>
       }

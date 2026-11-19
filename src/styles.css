@@ -419,6 +419,21 @@ textarea.input {
   width: 100%;
 }
 
+/* Native date picker: same height as other inputs, purple calendar icon on hover. */
+input[type='date'].input {
+  cursor: text;
+}
+
+input[type='date'].input::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+  opacity: 0.6;
+  transition: opacity var(--transition);
+}
+
+input[type='date'].input::-webkit-calendar-picker-indicator:hover {
+  opacity: 1;
+}
+
 .select {
   appearance: none;
   cursor: pointer;

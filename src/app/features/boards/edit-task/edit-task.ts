@@ -57,6 +57,7 @@ export class EditTask implements HasUnsavedChanges {
       description: task.description,
       subtasks: task.subtasks,
       columnId: column.id,
+      dueDate: task.dueDate ?? '',
     };
   });
 

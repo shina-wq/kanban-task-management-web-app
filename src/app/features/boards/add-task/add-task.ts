@@ -53,6 +53,7 @@ export class AddTask implements HasUnsavedChanges {
       { title: '', isCompleted: false },
     ],
     columnId: this.statuses()[0]?.id ?? '',
+    dueDate: '',
   }));
 
   protected create(draft: TaskDraft): void {

@@ -48,6 +48,7 @@ export class TaskForm implements OnInit {
     description: [''],
     subtasks: this.fb.array<SubtaskGroup>([]),
     columnId: ['', Validators.required],
+    dueDate: [''], // Optional; "" means no due date.
   });
 
   protected get subtasks() {
@@ -56,9 +57,9 @@ export class TaskForm implements OnInit {
 
   /** Inputs are ready in ngOnInit, so fill the form here. */
   ngOnInit(): void {
-    const { title, description, subtasks, columnId } = this.initialValue();
+    const { title, description, subtasks, columnId, dueDate } = this.initialValue();
     subtasks.forEach((subtask) => this.subtasks.push(this.subtaskGroup(subtask)));
-    this.form.patchValue({ title, description, columnId });
+    this.form.patchValue({ title, description, columnId, dueDate });
   }
 
   /** True when the user changed something that hasn't been submitted yet. */

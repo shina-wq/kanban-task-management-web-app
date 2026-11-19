@@ -144,6 +144,8 @@ export class BoardService {
       title: draft.title.trim(),
       description: draft.description.trim(),
       subtasks: draft.subtasks.map((s) => ({ title: s.title.trim(), isCompleted: s.isCompleted })),
+      // undefined (not "") so clearing the date on edit removes it from the task.
+      dueDate: draft.dueDate || undefined,
     };
   }
 }

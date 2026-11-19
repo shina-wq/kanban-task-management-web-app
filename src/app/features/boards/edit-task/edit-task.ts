@@ -20,7 +20,12 @@ import { TaskForm } from '../task-form/task-form';
   selector: 'app-edit-task',
   imports: [Modal, TaskForm],
   template: `
-    <app-modal labelledBy="edit-task-title">
+    <!-- Closing without saving goes back to the task it was opened from. -->
+    <app-modal
+      labelledBy="edit-task-title"
+      [showClose]="true"
+      [returnTo]="['/boards', boardId(), 'tasks', taskId()]"
+    >
       <h2 id="edit-task-title" class="heading-l">Edit Task</h2>
       @if (initialValue(); as value) {
         <app-task-form
@@ -85,7 +90,11 @@ export class EditTask implements HasUnsavedChanges {
 
     this.form()?.markAsSaved(draft);
     this.toast.success('Task updated');
-    this.router.navigate(['/boards', this.boardId()], { queryParamsHandling: 'preserve' });
+    // replaceUrl: the browser's Back button shouldn't reopen the form that was just saved.
+    this.router.navigate(['/boards', this.boardId()], {
+      queryParamsHandling: 'preserve',
+      replaceUrl: true,
+    });
   }
 
   /** Used by the unsaved-changes guard. */

@@ -43,7 +43,9 @@
       <a
         class="btn btn-primary btn-lg add-task"
         [routerLink]="['/boards', board.id, 'tasks', 'new']"
+        queryParamsHandling="preserve"
         [attr.aria-disabled]="board.columns.length === 0"
+        [attr.tabindex]="board.columns.length === 0 ? -1 : null"
         aria-label="Add new task"
       >
         <app-icon name="plus" />

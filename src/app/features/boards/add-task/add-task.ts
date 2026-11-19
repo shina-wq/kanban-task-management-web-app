@@ -19,7 +19,7 @@ import { TaskForm } from '../task-form/task-form';
   selector: 'app-add-task',
   imports: [Modal, TaskForm],
   template: `
-    <app-modal labelledBy="add-task-title">
+    <app-modal labelledBy="add-task-title" [showClose]="true">
       <h2 id="add-task-title" class="heading-l">Add New Task</h2>
       <app-task-form
         [initialValue]="initialValue()"
@@ -71,7 +71,11 @@ export class AddTask implements HasUnsavedChanges {
 
     this.form()?.markAsSaved(draft);
     this.toast.success('Task created');
-    this.router.navigate(['/boards', this.boardId()], { queryParamsHandling: 'preserve' });
+    // replaceUrl: the browser's Back button shouldn't reopen the form that was just saved.
+    this.router.navigate(['/boards', this.boardId()], {
+      queryParamsHandling: 'preserve',
+      replaceUrl: true,
+    });
   }
 
   /** Used by the unsaved-changes guard. */

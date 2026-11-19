@@ -1,121 +1,94 @@
+import { ChangeDetectionStrategy, Component, OnInit, inject, input, output } from '@angular/core';
 import {
-  ChangeDetectionStrategy,
-  Component,
-  OnInit,
-  computed,
-  inject,
-  input,
-  viewChild,
-} from '@angular/core';
-import { FormsModule, NgForm } from '@angular/forms';
-import { Router } from '@angular/router';
-import { HasUnsavedChanges } from '../../../core/guards/unsaved-changes.guard';
-import { TaskDraft } from '../../../core/models/board.model';
-import { BoardService } from '../../../core/services/board.service';
-import { ToastService } from '../../../core/services/toast.service';
-import { createId } from '../../../core/utils/id';
+  FormControl,
+  FormGroup,
+  NonNullableFormBuilder,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
+import { Column, Subtask, TaskDraft } from '../../../core/models/board.model';
 import { Icon } from '../../../shared/icon/icon';
-import { Modal } from '../../../shared/modal/modal';
 
-/** One editable subtask row. `key` is only for @for tracking. */
-interface SubtaskRow {
-  key: string;
-  title: string;
-  isCompleted: boolean;
-}
+/** Contains at least one non-space character. */
+const NOT_BLANK = /\S/;
+
+type SubtaskGroup = FormGroup<{
+  title: FormControl<string>;
+  isCompleted: FormControl<boolean>;
+}>;
 
 /**
- * Add New Task (/boards/:boardId/tasks/new) and
- * Edit Task (/boards/:boardId/tasks/:taskId/edit).
+ * Shared task form used by AddTask and EditTask (reactive form).
+ * It only collects and validates input: the parent gives it the starting
+ * values and the statuses, and gets the result through (submitted).
+ *
+ * <app-task-form [initialValue]="draft" [statuses]="columns" submitLabel="Create Task"
+ *                (submitted)="save($event)" />
  */
 @Component({
   selector: 'app-task-form',
-  imports: [FormsModule, Modal, Icon],
+  imports: [ReactiveFormsModule, Icon],
   templateUrl: './task-form.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class TaskForm implements OnInit, HasUnsavedChanges {
-  private readonly boardService = inject(BoardService);
-  private readonly router = inject(Router);
-  private readonly toast = inject(ToastService);
-  private readonly form = viewChild.required(NgForm);
+export class TaskForm implements OnInit {
+  private readonly fb = inject(NonNullableFormBuilder);
 
-  // Route params. `taskId` is undefined when adding a new task.
-  readonly boardId = input.required<string>();
-  readonly taskId = input<string>();
+  /** Values the form starts with (empty task, or the task being edited). */
+  readonly initialValue = input.required<TaskDraft>();
+  /** The board's columns: a task's status is the column it lives in. */
+  readonly statuses = input.required<Column[]>();
+  readonly submitLabel = input.required<string>();
 
-  protected readonly isEdit = computed(() => this.taskId() !== undefined);
-  protected readonly statuses = computed(
-    () => this.boardService.getBoard(this.boardId())?.columns ?? [],
-  );
+  /** Emits the form value when a valid form is submitted. */
+  readonly submitted = output<TaskDraft>();
 
-  // Form model
-  protected title = '';
-  protected description = '';
-  protected subtasks: SubtaskRow[] = [];
-  protected columnId = '';
+  protected readonly form = this.fb.group({
+    title: ['', [Validators.required, Validators.pattern(NOT_BLANK)]],
+    description: [''],
+    subtasks: this.fb.array<SubtaskGroup>([]),
+    columnId: ['', Validators.required],
+  });
 
-  private rowsChanged = false;
-  private saved = false;
+  protected get subtasks() {
+    return this.form.controls.subtasks;
+  }
 
-  /** Inputs (route params) are ready in ngOnInit, so fill the form here. */
+  /** Inputs are ready in ngOnInit, so fill the form here. */
   ngOnInit(): void {
-    const found = this.boardService.findTask(this.boardId(), this.taskId() ?? '');
-    if (found) {
-      this.title = found.task.title;
-      this.description = found.task.description;
-      this.subtasks = found.task.subtasks.map((s) => ({ key: createId(), ...s }));
-      this.columnId = found.column.id;
-    } else {
-      this.subtasks = [newRow(), newRow()];
-      this.columnId = this.statuses()[0]?.id ?? '';
-    }
+    const { title, description, subtasks, columnId } = this.initialValue();
+    subtasks.forEach((subtask) => this.subtasks.push(this.subtaskGroup(subtask)));
+    this.form.patchValue({ title, description, columnId });
+  }
+
+  /** True when the user changed something that hasn't been submitted yet. */
+  isDirty(): boolean {
+    return this.form.dirty;
   }
 
   protected addSubtask(): void {
-    this.subtasks.push(newRow());
-    this.rowsChanged = true;
+    this.subtasks.push(this.subtaskGroup());
+    this.subtasks.markAsDirty(); // Adding/removing rows doesn't mark the form dirty by itself.
   }
 
   protected removeSubtask(index: number): void {
-    this.subtasks.splice(index, 1);
-    this.rowsChanged = true;
+    this.subtasks.removeAt(index);
+    this.subtasks.markAsDirty();
   }
 
-  protected save(): void {
-    const form = this.form();
-    if (form.invalid) {
-      form.control.markAllAsTouched(); // Show every "Can't be empty" message.
+  protected submit(): void {
+    if (this.form.invalid) {
+      this.form.markAllAsTouched(); // Show every error message.
       return;
     }
-
-    const draft: TaskDraft = {
-      title: this.title,
-      description: this.description,
-      subtasks: this.subtasks.map(({ title, isCompleted }) => ({ title, isCompleted })),
-      columnId: this.columnId,
-    };
-    this.saved = true;
-
-    const taskId = this.taskId();
-    if (taskId) {
-      this.boardService.updateTask(this.boardId(), taskId, draft);
-      this.toast.success('Task updated');
-    } else {
-      this.boardService.createTask(this.boardId(), draft);
-      this.toast.success('Task created');
-    }
-
-    // Programmatic navigation back to the board, keeping any ?search= term.
-    this.router.navigate(['/boards', this.boardId()], { queryParamsHandling: 'preserve' });
+    this.submitted.emit(this.form.getRawValue());
+    this.form.markAsPristine(); // Saved: the unsaved-changes guard shouldn't ask anymore.
   }
 
-  /** Used by the unsaved-changes guard. */
-  hasUnsavedChanges(): boolean {
-    return !this.saved && (this.form().dirty || this.rowsChanged);
+  private subtaskGroup(subtask: Subtask = { title: '', isCompleted: false }): SubtaskGroup {
+    return this.fb.group({
+      title: [subtask.title, [Validators.required, Validators.pattern(NOT_BLANK)]],
+      isCompleted: [subtask.isCompleted],
+    });
   }
-}
-
-function newRow(): SubtaskRow {
-  return { key: createId(), title: '', isCompleted: false };
 }

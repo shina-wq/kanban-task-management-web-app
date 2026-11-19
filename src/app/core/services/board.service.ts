@@ -24,6 +24,14 @@ export class BoardService {
     return this.locate(this.state(), boardId, taskId);
   }
 
+  /** Titles of every task on a board, except `exceptTaskId` (the task being edited). */
+  taskTitles(boardId: string, exceptTaskId?: string): string[] {
+    return (this.getBoard(boardId)?.columns ?? [])
+      .flatMap((column) => column.tasks)
+      .filter((task) => task.id !== exceptTaskId)
+      .map((task) => task.title);
+  }
+
   // Boards
 
   createBoard(draft: BoardDraft): Board {

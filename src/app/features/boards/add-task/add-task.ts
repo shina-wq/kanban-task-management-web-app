@@ -24,6 +24,7 @@ import { TaskForm } from '../task-form/task-form';
       <app-task-form
         [initialValue]="initialValue()"
         [statuses]="statuses()"
+        [takenTitles]="takenTitles()"
         submitLabel="Create Task"
         (submitted)="create($event)"
       />
@@ -39,6 +40,9 @@ export class AddTask implements HasUnsavedChanges {
 
   /** Route param. */
   readonly boardId = input.required<string>();
+
+  /** Other tasks' titles on this board, for the "unique title" rule. */
+  protected readonly takenTitles = computed(() => this.boardService.taskTitles(this.boardId()));
 
   protected readonly statuses = computed(
     () => this.boardService.getBoard(this.boardId())?.columns ?? [],

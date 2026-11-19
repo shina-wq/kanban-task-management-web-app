@@ -359,7 +359,8 @@ textarea.input {
 }
 
 /* Angular adds ng-invalid / ng-touched to form controls automatically. */
-.input.ng-invalid.ng-touched {
+.input.ng-invalid.ng-touched,
+.input[aria-invalid='true'] {
   border-color: var(--color-red);
   padding-right: 7.5rem;
 }
@@ -378,6 +379,34 @@ textarea.input {
   font-size: 0.8125rem;
   color: var(--color-red);
   pointer-events: none;
+}
+
+/* Textareas and date inputs: the message goes below the field instead of inside it. */
+.control-stacked .input.input {
+  padding-right: 1rem;
+}
+
+.control-stacked .error {
+  position: static;
+  translate: none;
+}
+
+.control-footer {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 0.375rem;
+}
+
+.control-footer .counter {
+  margin-left: auto;
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+}
+
+.control-stacked > .error {
+  display: block;
+  margin-top: 0.375rem;
 }
 
 /* Layout for the forms inside modals. */

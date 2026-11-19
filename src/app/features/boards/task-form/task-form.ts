@@ -17,6 +17,7 @@ import {
 } from '@angular/forms';
 import { Column, Subtask, TaskDraft } from '../../../core/models/board.model';
 import {
+  completeDate,
   noDuplicateItems,
   notBlank,
   notInPast,
@@ -84,8 +85,14 @@ export class TaskForm implements OnInit {
     subtasks: this.fb.array<SubtaskGroup>([], noDuplicateItems('title')),
     columnId: ['', Validators.required],
     // Optional; "" means no due date. The task's saved date is always allowed.
-    dueDate: ['', notInPast(() => this.initialValue().dueDate)],
+    dueDate: [
+      '',
+      [completeDate(() => this.dueDateIncomplete), notInPast(() => this.initialValue().dueDate)],
+    ],
   });
+
+  /** True while the date input is only partly filled in (see checkDueDate). */
+  private dueDateIncomplete = false;
 
   protected get subtasks() {
     return this.form.controls.subtasks;
@@ -126,6 +133,21 @@ export class TaskForm implements OnInit {
       : null;
   }
 
+  /**
+   * Re-checks whether the date input is partly filled in. Called when the date
+   * changes, when the user leaves the field, and before submitting.
+   */
+  protected checkDueDate(): void {
+    const input = this.host.nativeElement.querySelector<HTMLInputElement>('#task-due-date');
+    const incomplete = input?.validity.badInput ?? false;
+    if (incomplete === this.dueDateIncomplete) return;
+
+    this.dueDateIncomplete = incomplete;
+    const control = this.form.controls.dueDate;
+    if (incomplete) control.markAsDirty(); // Typing part of a date is a change worth guarding.
+    control.updateValueAndValidity();
+  }
+
   protected addSubtask(): void {
     this.subtasks.push(this.subtaskGroup());
     this.subtasks.markAsDirty(); // Adding/removing rows doesn't mark the form dirty by itself.
@@ -151,6 +173,7 @@ export class TaskForm implements OnInit {
   }
 
   protected submit(): void {
+    this.checkDueDate();
     if (this.form.invalid) {
       this.form.markAllAsTouched(); // Show every error message…
       this.focusFirstInvalid(); // …and take the user to the first one.

@@ -59,6 +59,16 @@ export function notInPast(getAllowed: () => string = () => ''): ValidatorFn {
   };
 }
 
+/**
+ * Fails with `{ incompleteDate: true }` while `isIncomplete()` is true.
+ * A native date input that is only partly filled (e.g. "20-Dec-yyyy") reports its value
+ * as "" — the same as no date — so the form can't tell from the value alone. The component
+ * reads the input's `validity.badInput` and passes it in here.
+ */
+export function completeDate(isIncomplete: () => boolean): ValidatorFn {
+  return () => (isIncomplete() ? { incompleteDate: true } : null);
+}
+
 /** Today's local date as an ISO string, e.g. "2026-11-19". */
 export function todayIso(): string {
   const now = new Date();

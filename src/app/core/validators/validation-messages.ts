@@ -9,6 +9,7 @@ export function errorMessage(errors: ValidationErrors | null | undefined): strin
   if (errors['required'] || errors['blank']) return "Can't be empty";
   if (errors['maxlength']) return `Max ${errors['maxlength'].requiredLength} characters`;
   if (errors['duplicate']) return 'Already exists';
+  if (errors['incompleteDate']) return 'Enter a full date';
   if (errors['pastDate']) return "Can't be in the past";
   return 'Invalid value';
 }

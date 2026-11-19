@@ -1,77 +1,68 @@
 # Kanban Task Management
 
-A task board for organising work into boards, columns and tasks, built with Angular.
-Based on the [Frontend Mentor Kanban challenge](https://www.frontendmentor.io/challenges/kanban-task-management-web-app-wgQLt-HlbB).
+A responsive Kanban board for organising work into boards, columns and tasks, built with Angular.
+
+Design by [Frontend Mentor](https://www.frontendmentor.io/challenges/kanban-task-management-web-app-wgQLt-HlbB)
 
 ## Features
 
-- Create, edit and delete boards, columns and tasks
-- Track subtasks and change a task's status
+- Boards, columns and tasks with subtasks, statuses and optional due dates
 - Drag and drop tasks between columns
 - Search tasks on a board
-- Light and dark themes
-- Responsive on mobile, tablet and desktop
-- Everything is saved in your browser, with sample boards to start
+- Validated forms with clear, live error messages
+- "Due today" and "Overdue" labels on tasks
+- A warning before you leave a form with unsaved changes
+- Light and dark themes, responsive from phone to desktop
+- No backend: data is saved in your browser, with sample boards to start
 
-> Log in with any name. There is no password, and no data leaves your browser.
-
-## Tech stack
-
-- [Angular 22](https://angular.dev) with signals and standalone components
-- Angular Router for navigation, lazy loading and guards
-- Angular CDK for drag and drop
-- Plain CSS with custom properties for theming
+```
+Log in with any name. There's no password, and nothing leaves your browser.
+```
 
 ## Getting started
 
-You need [Node.js](https://nodejs.org) 22.22+ or 24.15+.
+Requires [Node.js](https://nodejs.org) 22.22+ or 24.15+.
 
 ```bash
-git clone https://github.com/shina-wq/kanban-task-management-web-app.git
-cd kanban-task-management-web-app
+git clone https://github.com/shina-wq/kanban-task-management-web-app-v2.git
+cd kanban-task-management-web-app-v2
 npm install
 npm start
 ```
 
-Open http://localhost:4200.
+Then open http://localhost:4200.
 
-| Command         | What it does                        |
-| --------------- | ----------------------------------- |
-| `npm start`     | Runs the dev server                 |
-| `npm run build` | Builds for production into `dist/`  |
+| Command         | Description                       |
+| --------------- | --------------------------------- |
+| `npm start`     | Start the dev server              |
+| `npm run build` | Build for production into `dist/` |
 
-## Routes
+## Tech stack
 
-Every page and modal has its own URL, so links, refresh and the Back button all work.
+- **[Angular 22](https://angular.dev):** standalone components, signals, OnPush change detection
+- **Angular Forms:** typed reactive forms with custom validators for tasks, template-driven forms elsewhere
+- **Angular Router:** lazy loading, guards, and route params bound as component inputs
+- **Angular CDK:** drag and drop
+- **CSS:** plain CSS with custom properties for theming, no UI library
 
-| URL                                       | Page                    |
-| ----------------------------------------- | ----------------------- |
-| `/login`                                  | Log in                  |
-| `/boards`                                 | All boards              |
-| `/boards/new`                             | Add a board             |
-| `/boards/:boardId?search=`                | A board (with search)   |
-| `/boards/:boardId/edit` or `/delete`      | Edit or delete a board  |
-| `/boards/:boardId/tasks/new`              | Add a task              |
-| `/boards/:boardId/tasks/:taskId`          | Task details            |
-| `/boards/:boardId/tasks/:taskId/edit`     | Edit a task             |
-| `/boards/:boardId/tasks/:taskId/delete`   | Delete a task           |
-| `/settings`                               | Profile, theme and data |
+## How it works
+
+- **Every view has a URL.** Boards, tasks and modals are routes (e.g. `/boards/:boardId/tasks/:taskId/edit`), so links, refresh and the Back button all work.
+- **One task form for add and edit.** `AddTask` and `EditTask` pass starting values to a shared `TaskForm`, which validates the input and emits the result for the parent to save.
+- **Validation** covers required fields, length limits, unique task titles per board, duplicate subtasks, and past or half-typed due dates. Errors are announced to screen readers.
+- **Guards** protect unsaved forms (`CanDeactivate`) and redirect missing boards and tasks to a Not Found page.
+- **State** lives in a single `BoardService`: a signal of all boards, saved to `localStorage`.
 
 ## Project structure
 
 ```
 src/app/
-├── core/       # Models, services, guards
-├── shared/     # Reusable UI: modal, menu, icon
+├── core/       # Models, services, guards, validators
+├── shared/     # Reusable UI: modal, menu, icon, due date
 ├── layout/     # Header, sidebar, search, toasts
-└── features/   # Pages: login, boards, settings, not found
+└── features/   # Login, boards and tasks, settings, not found
 ```
 
 ## Deployment
 
-Ready for [Vercel](https://vercel.com): import the repository and deploy.
-`vercel.json` sends every URL to `index.html`, so deep links work on refresh.
-
-## Credits
-
-Design by [Frontend Mentor](https://www.frontendmentor.io).
+Configured for [Vercel](https://vercel.com): import the repository and deploy. `vercel.json` rewrites every URL to `index.html`, so deep links work on refresh.

@@ -13,7 +13,7 @@ export const appConfig: ApplicationConfig = {
     provideBrowserGlobalErrorListeners(),
     provideRouter(
       routes,
-      // to pass route parameters and query parameters directly into component inputs instead of injecting ActivatedRoute
+      // to pass route parameters and query parameters directly into component inputs
       withComponentInputBinding(),
       withRouterConfig({
         // some nested routes need parameters defined on their parent route, particularly boardId

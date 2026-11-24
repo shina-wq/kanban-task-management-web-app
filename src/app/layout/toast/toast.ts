@@ -38,11 +38,19 @@ export class ShowPopover {
         [class.toast-error]="toast.kind === 'error'"
         [attr.role]="toast.kind === 'error' ? 'alert' : 'status'"
       >
-        <span class="badge" aria-hidden="true">
-          <app-icon [name]="toast.kind === 'error' ? 'cross' : 'check'" />
-        </span>
+        @if (toast.kind !== 'question') {
+          <span class="badge" aria-hidden="true">
+            <app-icon [name]="toast.kind === 'error' ? 'cross' : 'check'" />
+          </span>
+        }
 
         <p class="heading-m message">{{ toast.message }}</p>
+
+        @if (toast.action; as action) {
+          <button type="button" class="action" (click)="service.runAction()">
+            {{ action.label }}
+          </button>
+        }
 
         <button type="button" class="close" aria-label="Dismiss" (click)="service.dismiss()">
           <app-icon name="cross" />

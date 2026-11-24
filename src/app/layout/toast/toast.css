@@ -4,7 +4,7 @@
   position: fixed;
   inset: auto auto 1.5rem 50%; /* Bottom center (overrides the popover's default centering). */
   margin: 0;
-  border: none;
+  border: 1px solid var(--border-card);
   color: inherit;
   overflow: visible;
   display: flex;
@@ -16,7 +16,7 @@
   translate: -50%;
   border-radius: var(--radius-md);
   background-color: var(--bg-surface);
-  box-shadow: 0 10px 20px rgb(54 78 126 / 25%);
+  box-shadow: var(--shadow-popover);
   animation: toast-in 200ms ease-out;
 }
 
@@ -43,6 +43,22 @@
 
 .message {
   flex: 1;
+}
+
+/* "Undo" / "Move" */
+.action {
+  height: 2rem;
+  padding: 0 0.75rem;
+  border-radius: var(--radius-sm);
+  background-color: var(--bg-accent-soft);
+  color: var(--text-accent);
+  font-size: 0.8125rem;
+  font-weight: var(--font-bold);
+  transition: background-color var(--transition);
+}
+
+.action:hover {
+  background-color: var(--bg-secondary-button-hover);
 }
 
 .close {

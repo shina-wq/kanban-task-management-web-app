@@ -28,5 +28,17 @@ export class Header {
 
   protected readonly title = computed(() => this.board()?.name ?? this.route().title ?? '');
 
+  /** Small line under the board name, e.g. "3 columns · 17 tasks". */
+  protected readonly summary = computed(() => {
+    const board = this.board();
+    if (!board) return '';
+    const tasks = board.columns.reduce((total, column) => total + column.tasks.length, 0);
+    return `${plural(board.columns.length, 'column')} · ${plural(tasks, 'task')}`;
+  });
+
   protected readonly mobileNavOpen = signal(false);
+}
+
+function plural(count: number, word: string): string {
+  return `${count} ${word}${count === 1 ? '' : 's'}`;
 }

@@ -32,11 +32,11 @@ import { DueDate } from '../../../shared/due-date/due-date';
   styles: `
     .card {
       display: grid;
-      gap: 0.75rem;
-      padding: 1rem;
+      gap: 0.5rem;
+      padding: 0.75rem 0.875rem;
       border: 1px solid var(--border-card);
-      border-radius: var(--radius-md);
-      background-color: var(--bg-surface);
+      border-radius: var(--radius-sm);
+      background-color: var(--bg-card);
       box-shadow: var(--shadow-card);
       transition:
         border-color var(--transition),
@@ -44,18 +44,19 @@ import { DueDate } from '../../../shared/due-date/due-date';
     }
 
     .card:hover {
-      border-color: rgb(99 95 199 / 45%);
+      border-color: rgb(99 95 199 / 40%);
       box-shadow: var(--shadow-card-hover);
     }
 
     .title {
+      font-size: 0.8125rem;
       font-weight: 600;
-      line-height: 1.375rem;
+      line-height: 1.25rem;
     }
 
     .progress {
       display: grid;
-      gap: 0.375rem;
+      gap: 0.3125rem;
     }
 
     .subtasks {
@@ -64,7 +65,7 @@ import { DueDate } from '../../../shared/due-date/due-date';
     }
 
     .track {
-      height: 0.25rem;
+      height: 0.1875rem;
       overflow: hidden;
       border-radius: var(--radius-pill);
       background-color: var(--bg-track);
@@ -85,7 +86,7 @@ import { DueDate } from '../../../shared/due-date/due-date';
     .footer {
       display: flex;
       align-items: center;
-      padding-top: 0.75rem;
+      padding-top: 0.5rem;
       border-top: 1px solid var(--border-card);
     }
   `,

@@ -93,7 +93,7 @@
 
 @media (min-width: 768px) {
   :host {
-    --size: 2.75rem;
+    --size: 2.5rem;
   }
 
   .search-button app-icon {

@@ -96,7 +96,7 @@ export interface TaskDrop {
     .tasks {
       display: flex;
       flex-direction: column;
-      gap: 0.625rem;
+      gap: 0.5rem;
       flex: 1;
       min-height: 6rem;
     }
@@ -115,7 +115,7 @@ export interface TaskDrop {
     }
 
     .placeholder {
-      min-height: 5.5rem;
+      min-height: 4.5rem;
       border: 1.5px dashed var(--color-purple);
       border-radius: var(--radius-md);
       background-color: var(--bg-secondary-button);

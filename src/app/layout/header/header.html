@@ -6,7 +6,12 @@
 <div class="bar">
   <!-- Title. On mobile it also opens the board dropdown. -->
   <div class="title-wrap" (appClickOutside)="mobileNavOpen.set(false)">
-    <h1 class="title">{{ title() }}</h1>
+    <div class="titles">
+      <h1 class="title">{{ title() }}</h1>
+      @if (summary(); as summary) {
+        <p class="subtitle">{{ summary }}</p>
+      }
+    </div>
 
     <button
       type="button"

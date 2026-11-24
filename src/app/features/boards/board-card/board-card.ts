@@ -36,14 +36,18 @@ import { columnColor } from '../column-color';
       gap: 0.75rem;
       height: 100%;
       padding: 1.5rem;
+      border: 1px solid var(--border-card);
       border-radius: var(--radius-md);
-      background-color: var(--bg-surface);
-      box-shadow: 0 1px 3px rgb(54 78 126 / 6%);
-      transition: box-shadow var(--transition);
+      background-color: var(--bg-card);
+      box-shadow: var(--shadow-card);
+      transition:
+        border-color var(--transition),
+        box-shadow var(--transition);
     }
 
     .card:hover {
-      box-shadow: 0 0 0 2px var(--color-purple);
+      border-color: rgb(99 95 199 / 40%);
+      box-shadow: var(--shadow-card-hover);
     }
 
     .title {

@@ -45,15 +45,16 @@ import { Icon } from '../icon/icon';
       max-height: calc(100dvh - 2rem);
       margin: auto;
       padding: 0;
-      border: none;
-      border-radius: var(--radius-md);
+      border: 1px solid var(--border-card);
+      border-radius: var(--radius-lg);
       background-color: var(--bg-surface);
       color: var(--text-primary);
+      box-shadow: var(--shadow-popover);
       animation: pop-in 150ms ease-out;
     }
 
     dialog::backdrop {
-      background-color: rgb(0 0 0 / 50%);
+      background-color: rgb(10 10 12 / 45%);
     }
 
     .panel {
@@ -72,19 +73,22 @@ import { Icon } from '../icon/icon';
       place-items: center;
       width: 2rem;
       height: 2rem;
-      border-radius: 50%;
+      border-radius: var(--radius-sm);
       color: var(--text-secondary);
-      transition: color var(--transition);
+      transition:
+        background-color var(--transition),
+        color var(--transition);
     }
 
     .close:hover,
     .close:focus-visible {
-      color: var(--color-purple);
+      background-color: var(--bg-hover);
+      color: var(--text-primary);
     }
 
     .close app-icon {
-      width: 0.9375rem;
-      height: 0.9375rem;
+      width: 0.75rem;
+      height: 0.75rem;
     }
 
     @media (min-width: 768px) {

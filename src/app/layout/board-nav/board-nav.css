@@ -19,12 +19,33 @@
   white-space: nowrap;
 }
 
+/* "Create New Board" is a real button, set apart from the board links. */
+.create-row {
+  margin: 0.5rem 0.75rem 0.75rem;
+}
+
 .create {
-  color: var(--color-purple);
+  width: 100%;
+  gap: 0.5rem;
+  border: 1px dashed rgb(99 95 199 / 35%);
+  font-weight: 600;
+}
+
+.create:hover {
+  border-style: solid;
+}
+
+.create app-icon {
+  width: 0.625rem;
+  height: 0.625rem;
 }
 
 @media (min-width: 1200px) {
   .all-boards {
     padding-left: 2rem;
+  }
+
+  .create-row {
+    margin-inline: 1rem;
   }
 }

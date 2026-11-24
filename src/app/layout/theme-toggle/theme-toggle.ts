@@ -26,7 +26,7 @@ import { Icon } from '../../shared/icon/icon';
       justify-content: center;
       gap: 1.5rem;
       height: 3rem;
-      border-radius: 0.375rem;
+      border-radius: var(--radius-sm);
       background-color: var(--bg-app);
       color: var(--text-secondary);
     }

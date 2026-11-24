@@ -160,8 +160,8 @@
   }
 
   .add-task {
-    height: 3rem;
-    padding: 0 1.5rem;
+    height: 2.75rem;
+    padding: 0 1.25rem;
   }
 
   .add-task app-icon {

@@ -9,47 +9,84 @@ import { DueDate } from '../../../shared/due-date/due-date';
   template: `
     <a class="card" [routerLink]="['tasks', task().id]" queryParamsHandling="preserve">
       <h3 class="heading-m title">{{ task().title }}</h3>
-      <div class="meta">
-        <p class="body-m subtasks">{{ completed() }} of {{ task().subtasks.length }} subtasks</p>
-        @if (task().dueDate; as dueDate) {
-          <app-due-date
-            [date]="dueDate"
-            [completed]="task().subtasks.length > 0 && completed() === task().subtasks.length"
-          />
-        }
-      </div>
+
+      @if (total()) {
+        <div class="progress">
+          <p class="body-m subtasks">{{ completed() }} of {{ total() }} subtasks</p>
+          <!-- Decorative: the text above already says how far along the task is. -->
+          <div class="track" aria-hidden="true">
+            <span class="fill" [class.done]="isDone()" [style.width.%]="percent()"></span>
+          </div>
+        </div>
+      } @else {
+        <p class="body-m subtasks">No subtasks</p>
+      }
+
+      @if (task().dueDate; as dueDate) {
+        <div class="footer">
+          <app-due-date [date]="dueDate" [completed]="isDone()" />
+        </div>
+      }
     </a>
   `,
   styles: `
     .card {
       display: grid;
-      gap: 0.5rem;
-      padding: 1.4375rem 1rem;
+      gap: 0.75rem;
+      padding: 1rem;
+      border: 1px solid var(--border-card);
       border-radius: var(--radius-md);
       background-color: var(--bg-surface);
-      box-shadow: 0 1px 3px rgb(54 78 126 / 6%);
+      box-shadow: var(--shadow-card);
+      transition:
+        border-color var(--transition),
+        box-shadow var(--transition);
+    }
+
+    .card:hover {
+      border-color: rgb(99 95 199 / 45%);
+      box-shadow: var(--shadow-card-hover);
     }
 
     .title {
       font-weight: 600;
-      transition: color var(--transition);
+      line-height: 1.375rem;
     }
 
-    .card:hover .title {
-      color: var(--color-purple);
-    }
-
-    .meta {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      justify-content: space-between;
-      gap: 0.5rem;
+    .progress {
+      display: grid;
+      gap: 0.375rem;
     }
 
     .subtasks {
       font-weight: var(--font-medium);
       color: var(--text-secondary);
+    }
+
+    .track {
+      height: 0.25rem;
+      overflow: hidden;
+      border-radius: var(--radius-pill);
+      background-color: var(--bg-track);
+    }
+
+    .fill {
+      display: block;
+      height: 100%;
+      border-radius: inherit;
+      background-color: var(--color-purple);
+      transition: width 300ms ease;
+    }
+
+    .fill.done {
+      background-color: var(--color-green);
+    }
+
+    .footer {
+      display: flex;
+      align-items: center;
+      padding-top: 0.75rem;
+      border-top: 1px solid var(--border-card);
     }
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -57,7 +94,13 @@ import { DueDate } from '../../../shared/due-date/due-date';
 export class TaskCard {
   readonly task = input.required<Task>();
 
+  protected readonly total = computed(() => this.task().subtasks.length);
   protected readonly completed = computed(
     () => this.task().subtasks.filter((subtask) => subtask.isCompleted).length,
   );
+  protected readonly percent = computed(() =>
+    this.total() ? (this.completed() / this.total()) * 100 : 0,
+  );
+  /** Finished when every subtask is done (a task without subtasks is never "done"). */
+  protected readonly isDone = computed(() => this.total() > 0 && this.completed() === this.total());
 }

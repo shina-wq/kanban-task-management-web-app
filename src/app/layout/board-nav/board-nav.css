@@ -4,7 +4,7 @@
 
 .all-boards {
   display: block;
-  padding: 0 1.5rem 1.25rem;
+  padding: 0 1.625rem 1rem;
   transition: color var(--transition);
 }
 

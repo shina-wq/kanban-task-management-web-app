@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
 import { todayIso } from '../../core/utils/dates';
+import { Icon } from '../icon/icon';
 
 /** 'plain' is a future date, or any date of a completed task. */
 type DueState = 'overdue' | 'today' | 'plain';
@@ -13,22 +14,36 @@ type DueState = 'overdue' | 'today' | 'plain';
  */
 @Component({
   selector: 'app-due-date',
-  template: ` <time class="due" [class]="state()" [attr.datetime]="date()">{{ label() }}</time> `,
+  imports: [Icon],
+  template: `
+    <time class="due" [class]="state()" [attr.datetime]="date()">
+      <app-icon name="calendar" />
+      {{ label() }}
+    </time>
+  `,
   styles: `
     .due {
-      display: inline-block;
-      padding: 0.125rem 0.5rem;
-      border-radius: var(--radius-pill);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.375rem;
+      padding: 0.1875rem 0.5rem;
+      border-radius: var(--radius-sm);
       background-color: var(--bg-subtask);
       font-size: 0.75rem;
       font-weight: var(--font-bold);
+      line-height: 1.125rem;
       color: var(--text-secondary);
       white-space: nowrap;
     }
 
+    app-icon {
+      width: 0.75rem;
+      height: 0.75rem;
+    }
+
     .today {
-      background-color: var(--bg-secondary-button);
-      color: var(--color-purple);
+      background-color: var(--bg-accent-soft);
+      color: var(--text-accent);
     }
 
     .overdue {

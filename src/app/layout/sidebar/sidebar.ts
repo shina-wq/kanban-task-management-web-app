@@ -31,7 +31,7 @@ import { ThemeToggle } from '../theme-toggle/theme-toggle';
 
     @media (min-width: 1200px) {
       app-theme-toggle {
-        margin: 0 1.5rem;
+        margin: 0 1rem;
       }
     }
   `,

@@ -18,7 +18,6 @@ import {
 import { errorMessage } from '../../../core/validators/validation-messages';
 import { Icon } from '../../../shared/icon/icon';
 
-// Maximum lengths for the task's text fields.
 const TASK_LIMITS = { title: 100, description: 500, subtask: 100 } as const;
 
 type SubtaskGroup = FormGroup<{
@@ -35,15 +34,11 @@ type SubtaskGroup = FormGroup<{
 export class TaskForm implements OnInit {
   private readonly fb = inject(FormBuilder).nonNullable;
 
-  // Values the form starts with
   readonly initialValue = input.required<TaskDraft>();
-  // The board's columns: a task's status is the column it lives in.
   readonly statuses = input.required<Column[]>();
-  // Titles of the board's other tasks; a new title can't repeat one.
   readonly takenTitles = input<readonly string[]>([]);
   readonly submitLabel = input.required<string>();
 
-  // Emits the form value when a valid form is submitted (it isn't saved yet).
   readonly submitted = output<TaskDraft>();
 
   protected readonly limits = TASK_LIMITS;
@@ -52,15 +47,16 @@ export class TaskForm implements OnInit {
   protected readonly form = this.fb.group({
     title: [
       '',
-      {
-        validators: [Validators.required, notBlank, Validators.maxLength(TASK_LIMITS.title)],
-        asyncValidators: uniqueTitle(() => this.takenTitles()),
-      },
+      [
+        Validators.required,
+        notBlank,
+        Validators.maxLength(TASK_LIMITS.title),
+        uniqueTitle(() => this.takenTitles()),
+      ],
     ],
     description: ['', Validators.maxLength(TASK_LIMITS.description)],
     subtasks: this.fb.array<SubtaskGroup>([], uniqueSubtasks),
     columnId: ['', Validators.required],
-    // Optional; "" means no due date. The task's saved date is always allowed.
     dueDate: ['', notInPast(() => this.initialValue().dueDate)],
   });
 
@@ -68,24 +64,20 @@ export class TaskForm implements OnInit {
     return this.form.controls.subtasks;
   }
 
-  // Inputs are ready in ngOnInit, so fill the form here.
   ngOnInit(): void {
     const { title, description, subtasks, columnId, dueDate } = this.initialValue();
     subtasks.forEach((subtask) => this.subtasks.push(this.subtaskGroup(subtask)));
     this.form.patchValue({ title, description, columnId, dueDate });
   }
 
-  // True when the user changed something that hasn't been submitted yet.
   isDirty(): boolean {
     return this.form.dirty;
   }
 
-  // Called by the parent once the task was saved, so the unsaved-changes guard doesn't ask.
   markAsSaved(saved: TaskDraft): void {
     this.form.reset(saved);
   }
 
-  // The message for a control, once the user has typed in it or left it.
   protected errorFor(control: AbstractControl): string | null {
     return control.invalid && (control.touched || control.dirty)
       ? errorMessage(control.errors)
@@ -94,7 +86,8 @@ export class TaskForm implements OnInit {
 
   protected addSubtask(): void {
     this.subtasks.push(this.subtaskGroup());
-    this.subtasks.markAsDirty(); // Adding/removing rows doesn't mark the form dirty by itself.
+    // FormArray changes don't mark the form dirty.
+    this.subtasks.markAsDirty();
   }
 
   protected removeSubtask(index: number): void {
@@ -103,10 +96,8 @@ export class TaskForm implements OnInit {
   }
 
   protected submit(): void {
-    // The async title check resolves right after each change, so this is only a safety net.
-    if (this.form.pending) return;
     if (this.form.invalid) {
-      this.form.markAllAsTouched(); // Show every error message.
+      this.form.markAllAsTouched();
       return;
     }
     this.submitted.emit(this.form.getRawValue());

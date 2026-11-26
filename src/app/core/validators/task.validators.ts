@@ -1,5 +1,4 @@
 import { AsyncValidatorFn, FormArray, ValidatorFn } from '@angular/forms';
-import { map, timer } from 'rxjs';
 import { todayIso } from '../utils/dates';
 
 /** Compare titles the way a person would: ignore case and surrounding spaces. */
@@ -43,17 +42,13 @@ export const uniqueSubtasks: ValidatorFn = (control) => {
 
 /**
  * Async. Fails with `{ duplicate: true }` when another task on the board already has this title.
- * In a real app this would ask the server, so it is async. The short wait also works as a
- * debounce: when the value changes, Angular cancels the pending check and starts a new one.
+ * Returns a Promise: in a real app this is where the server would be asked.
  * Async validators only run once the sync validators pass.
  */
 export function uniqueTitle(getTaken: () => readonly string[]): AsyncValidatorFn {
-  return (control) =>
-    timer(300).pipe(
-      map(() => {
-        const value = normalize(control.value ?? '');
-        const taken = getTaken().some((title) => normalize(title) === value);
-        return taken ? { duplicate: true } : null;
-      }),
-    );
+  return async (control) => {
+    const value = normalize(control.value ?? '');
+    const taken = getTaken().some((title) => normalize(title) === value);
+    return taken ? { duplicate: true } : null;
+  };
 }

@@ -25,12 +25,7 @@
     @if (found.task.dueDate; as dueDate) {
       <div>
         <p class="label">Due Date</p>
-        <app-due-date
-          [date]="dueDate"
-          [completed]="
-            found.task.subtasks.length > 0 && completedCount() === found.task.subtasks.length
-          "
-        />
+        <app-due-date [date]="dueDate" [completed]="isTaskDone(found.task)" />
       </div>
     }
 

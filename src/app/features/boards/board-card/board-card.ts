@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { Board } from '../../../core/models/board.model';
+import { countTasks } from '../../../core/utils/tasks';
 import { Icon } from '../../../shared/icon/icon';
 import { columnColor } from '../column-color';
 
@@ -94,7 +95,5 @@ export class BoardCard {
 
   protected readonly columnColor = columnColor;
 
-  protected readonly taskCount = computed(() =>
-    this.board().columns.reduce((total, column) => total + column.tasks.length, 0),
-  );
+  protected readonly taskCount = computed(() => countTasks(this.board().columns));
 }

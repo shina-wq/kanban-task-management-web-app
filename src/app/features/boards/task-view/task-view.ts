@@ -3,6 +3,7 @@ import { RouterLink } from '@angular/router';
 import { BoardService } from '../../../core/services/board.service';
 import { ToastService } from '../../../core/services/toast.service';
 import { suggestMove } from '../../../core/utils/auto-move';
+import { completedSubtasks, isTaskDone } from '../../../core/utils/tasks';
 import { DueDate } from '../../../shared/due-date/due-date';
 import { Menu } from '../../../shared/menu/menu';
 import { Modal } from '../../../shared/modal/modal';
@@ -28,9 +29,11 @@ export class TaskView {
     this.boardService.findTask(this.boardId(), this.taskId()),
   );
 
-  protected readonly completedCount = computed(
-    () => this.found()?.task.subtasks.filter((subtask) => subtask.isCompleted).length ?? 0,
-  );
+  protected readonly isTaskDone = isTaskDone;
+  protected readonly completedCount = computed(() => {
+    const found = this.found();
+    return found ? completedSubtasks(found.task) : 0;
+  });
 
   protected toggleSubtask(index: number): void {
     this.boardService.toggleSubtask(this.boardId(), this.taskId(), index);

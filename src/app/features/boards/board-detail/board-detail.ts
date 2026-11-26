@@ -3,7 +3,7 @@ import { CdkScrollable } from '@angular/cdk/scrolling';
 import { ChangeDetectionStrategy, Component, computed, inject, input } from '@angular/core';
 import { RouterLink, RouterOutlet } from '@angular/router';
 import { BoardService } from '../../../core/services/board.service';
-import { filterColumns } from '../../../core/utils/task-filters';
+import { countTasks, filterColumns } from '../../../core/utils/tasks';
 import { BoardColumn, TaskDrop } from '../board-column/board-column';
 
 /**
@@ -41,8 +41,4 @@ export class BoardDetail {
   protected moveTask(drop: TaskDrop): void {
     this.boardService.moveTask(this.boardId(), drop.taskId, drop.columnId, drop.index);
   }
-}
-
-function countTasks(columns: { tasks: unknown[] }[]): number {
-  return columns.reduce((total, column) => total + column.tasks.length, 0);
 }

@@ -1,4 +1,5 @@
 import { Board, Column, Task } from '../models/board.model';
+import { completedSubtasks } from './tasks';
 
 /**
  * Moving tasks between columns as their subtasks get checked.
@@ -20,7 +21,16 @@ export interface MoveSuggestion {
 // Compared after lowercasing and dropping spaces/punctuation, so "To-Do" matches "todo".
 const START_WORDS = ['todo', 'backlog', 'open', 'new', 'notstarted', 'planned'];
 const PROGRESS_WORDS = ['doing', 'inprogress', 'wip', 'active', 'started', 'working'];
-const DONE_WORDS = ['done', 'complete', 'completed', 'closed', 'finished', 'shipped', 'released', 'resolved'];
+const DONE_WORDS = [
+  'done',
+  'complete',
+  'completed',
+  'closed',
+  'finished',
+  'shipped',
+  'released',
+  'resolved',
+];
 
 function normalize(name: string): string {
   return name.toLowerCase().replace(/[^a-z]/g, '');
@@ -54,7 +64,7 @@ export function suggestMove(board: Board, column: Column, task: Task): MoveSugge
 
   const total = task.subtasks.length;
   if (total === 0) return null;
-  const done = task.subtasks.filter((subtask) => subtask.isCompleted).length;
+  const done = completedSubtasks(task);
 
   const { columns } = board;
   const first = columns[0];

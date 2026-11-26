@@ -49,12 +49,11 @@
     <legend class="label">Subtasks</legend>
 
     @for (subtask of subtasks.controls; track subtask; let i = $index) {
-      @let rowError = subtaskError(i);
+      @let rowError = errorFor(subtask.controls.title);
       <div class="form-row" [formGroupName]="i">
         <div class="control">
           <input
             class="input"
-            [id]="'subtask-' + i"
             [attr.aria-label]="'Subtask ' + (i + 1)"
             [placeholder]="i === 0 ? 'e.g. Make coffee' : 'e.g. Drink coffee & smile'"
             formControlName="title"
@@ -75,6 +74,10 @@
           <app-icon name="cross" />
         </button>
       </div>
+    }
+
+    @if (subtasks.hasError('duplicateSubtasks') && subtasks.touched) {
+      <p class="error" role="alert">Subtasks must be different</p>
     }
 
     <button type="button" class="btn btn-secondary btn-block" (click)="addSubtask()">
@@ -100,8 +103,6 @@
         type="date"
         class="input"
         formControlName="dueDate"
-        (input)="checkDueDate()"
-        (blur)="checkDueDate()"
         [min]="today"
         [attr.aria-invalid]="!!dueDateError"
         [attr.aria-describedby]="dueDateError ? 'task-due-date-error' : null"

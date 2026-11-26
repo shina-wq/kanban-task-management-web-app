@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { Task } from '../../../core/models/board.model';
+import { completedSubtasks, isTaskDone } from '../../../core/utils/tasks';
 import { DueDate } from '../../../shared/due-date/due-date';
 
 @Component({
@@ -96,12 +97,9 @@ export class TaskCard {
   readonly task = input.required<Task>();
 
   protected readonly total = computed(() => this.task().subtasks.length);
-  protected readonly completed = computed(
-    () => this.task().subtasks.filter((subtask) => subtask.isCompleted).length,
-  );
+  protected readonly completed = computed(() => completedSubtasks(this.task()));
   protected readonly percent = computed(() =>
     this.total() ? (this.completed() / this.total()) * 100 : 0,
   );
-  /** Finished when every subtask is done (a task without subtasks is never "done"). */
-  protected readonly isDone = computed(() => this.total() > 0 && this.completed() === this.total());
+  protected readonly isDone = computed(() => isTaskDone(this.task()));
 }

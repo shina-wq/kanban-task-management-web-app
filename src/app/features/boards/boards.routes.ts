@@ -9,11 +9,6 @@ import { DeleteConfirm } from './delete-confirm/delete-confirm';
 import { EditTask } from './edit-task/edit-task';
 import { TaskView } from './task-view/task-view';
 
-/**
- * Lazy-loaded routes for the boards feature (loaded from app.routes.ts).
- * Every modal is a child route, rendered in its parent page's <router-outlet>.
- * Forms ask before closing with unsaved changes (unsavedChangesGuard).
- */
 export default [
   {
     // /boards

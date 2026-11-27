@@ -17,17 +17,12 @@ import { createId } from '../../../core/utils/id';
 import { Icon } from '../../../shared/icon/icon';
 import { Modal } from '../../../shared/modal/modal';
 
-/** One editable column row. `key` is only for @for tracking; `id` is set for existing columns. */
 interface ColumnRow {
   key: string;
   id?: string;
   name: string;
 }
 
-/**
- * Add New Board (/boards/new) and Edit Board (/boards/:boardId/edit).
- * Template-driven form: the inputs are bound to plain fields with [(ngModel)].
- */
 @Component({
   selector: 'app-board-form',
   imports: [FormsModule, Modal, Icon],
@@ -40,18 +35,16 @@ export class BoardForm implements OnInit, HasUnsavedChanges {
   private readonly toast = inject(ToastService);
   private readonly form = viewChild.required(NgForm);
 
-  /** Route param; undefined on /boards/new. */
   readonly boardId = input<string>();
   protected readonly isEdit = computed(() => this.boardId() !== undefined);
 
-  // Form model
   protected name = '';
   protected columns: ColumnRow[] = [];
 
+  // Tracks column changes that NgForm does not detect.
   private rowsChanged = false;
   private saved = false;
 
-  /** Inputs (route params) are ready in ngOnInit, so fill the form here. */
   ngOnInit(): void {
     const board = this.boardService.getBoard(this.boardId() ?? '');
     if (board) {
@@ -75,7 +68,7 @@ export class BoardForm implements OnInit, HasUnsavedChanges {
   protected save(): void {
     const form = this.form();
     if (form.invalid) {
-      form.control.markAllAsTouched(); // Show every "Can't be empty" message.
+      form.control.markAllAsTouched();
       return;
     }
 
@@ -85,7 +78,6 @@ export class BoardForm implements OnInit, HasUnsavedChanges {
     };
     this.saved = true;
 
-    // Save, confirm with a toast, then navigate programmatically to the board.
     const boardId = this.boardId();
     if (boardId) {
       this.boardService.updateBoard(boardId, draft);
@@ -98,7 +90,6 @@ export class BoardForm implements OnInit, HasUnsavedChanges {
     }
   }
 
-  /** Used by the unsaved-changes guard. */
   hasUnsavedChanges(): boolean {
     return !this.saved && (this.form().dirty || this.rowsChanged);
   }

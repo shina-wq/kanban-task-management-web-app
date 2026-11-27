@@ -65,6 +65,7 @@ export class BoardForm implements OnInit, HasUnsavedChanges {
     this.rowsChanged = true;
   }
 
+  // handles form validation, data preparation, saving, notifications, and navigation after saving.
   protected save(): void {
     const form = this.form();
     if (form.invalid) {
@@ -95,6 +96,7 @@ export class BoardForm implements OnInit, HasUnsavedChanges {
   }
 }
 
+// creates new column object
 function newRow(name = ''): ColumnRow {
   return { key: createId(), name };
 }

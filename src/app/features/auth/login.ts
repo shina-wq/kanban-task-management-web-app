@@ -4,7 +4,6 @@ import { Router } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
 import { Icon } from '../../shared/icon/icon';
 
-
 @Component({
   selector: 'app-login',
   imports: [FormsModule, Icon],
@@ -16,7 +15,7 @@ export default class Login {
   private readonly auth = inject(AuthService);
   private readonly router = inject(Router);
 
-  /** Query param set by authGuard: the page the user was trying to open. */
+  // Route to return to after login.
   readonly returnUrl = input<string>();
 
   protected name = '';

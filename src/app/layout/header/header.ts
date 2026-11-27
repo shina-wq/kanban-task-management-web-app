@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@a
 import { RouterLink } from '@angular/router';
 import { injectDeepestRoute } from '../../core/routing/deepest-route';
 import { BoardService } from '../../core/services/board.service';
+import { countTasks } from '../../core/utils/tasks';
 import { ClickOutside } from '../../shared/directives/click-outside.directive';
 import { Icon } from '../../shared/icon/icon';
 import { Menu } from '../../shared/menu/menu';
@@ -28,5 +29,16 @@ export class Header {
 
   protected readonly title = computed(() => this.board()?.name ?? this.route().title ?? '');
 
+  /** Small line under the board name, e.g. "3 columns · 17 tasks". */
+  protected readonly summary = computed(() => {
+    const board = this.board();
+    if (!board) return '';
+    return `${plural(board.columns.length, 'column')} · ${plural(countTasks(board.columns), 'task')}`;
+  });
+
   protected readonly mobileNavOpen = signal(false);
+}
+
+function plural(count: number, word: string): string {
+  return `${count} ${word}${count === 1 ? '' : 's'}`;
 }

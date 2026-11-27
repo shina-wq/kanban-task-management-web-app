@@ -1,121 +1,115 @@
+import { ChangeDetectionStrategy, Component, OnInit, inject, input, output } from '@angular/core';
 import {
-  ChangeDetectionStrategy,
-  Component,
-  OnInit,
-  computed,
-  inject,
-  input,
-  viewChild,
-} from '@angular/core';
-import { FormsModule, NgForm } from '@angular/forms';
-import { Router } from '@angular/router';
-import { HasUnsavedChanges } from '../../../core/guards/unsaved-changes.guard';
-import { TaskDraft } from '../../../core/models/board.model';
-import { BoardService } from '../../../core/services/board.service';
-import { ToastService } from '../../../core/services/toast.service';
-import { createId } from '../../../core/utils/id';
+  AbstractControl,
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
+import { Column, Subtask, TaskDraft } from '../../../core/models/board.model';
+import { todayIso } from '../../../core/utils/dates';
+import {
+  notBlank,
+  notInPast,
+  uniqueSubtasks,
+  uniqueTitle,
+} from '../../../core/validators/task.validators';
+import { errorMessage } from '../../../core/validators/validation-messages';
 import { Icon } from '../../../shared/icon/icon';
-import { Modal } from '../../../shared/modal/modal';
 
-/** One editable subtask row. `key` is only for @for tracking. */
-interface SubtaskRow {
-  key: string;
-  title: string;
-  isCompleted: boolean;
-}
+const TASK_LIMITS = { title: 100, description: 500, subtask: 100 } as const;
 
-/**
- * Add New Task (/boards/:boardId/tasks/new) and
- * Edit Task (/boards/:boardId/tasks/:taskId/edit).
- */
+type SubtaskGroup = FormGroup<{
+  title: FormControl<string>;
+  isCompleted: FormControl<boolean>;
+}>;
+
 @Component({
   selector: 'app-task-form',
-  imports: [FormsModule, Modal, Icon],
+  imports: [ReactiveFormsModule, Icon],
   templateUrl: './task-form.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class TaskForm implements OnInit, HasUnsavedChanges {
-  private readonly boardService = inject(BoardService);
-  private readonly router = inject(Router);
-  private readonly toast = inject(ToastService);
-  private readonly form = viewChild.required(NgForm);
+export class TaskForm implements OnInit {
+  private readonly fb = inject(FormBuilder).nonNullable;
 
-  // Route params. `taskId` is undefined when adding a new task.
-  readonly boardId = input.required<string>();
-  readonly taskId = input<string>();
+  readonly initialValue = input.required<TaskDraft>();
+  readonly statuses = input.required<Column[]>();
+  readonly takenTitles = input<readonly string[]>([]);
+  readonly submitLabel = input.required<string>();
 
-  protected readonly isEdit = computed(() => this.taskId() !== undefined);
-  protected readonly statuses = computed(
-    () => this.boardService.getBoard(this.boardId())?.columns ?? [],
-  );
+  readonly submitted = output<TaskDraft>();
 
-  // Form model
-  protected title = '';
-  protected description = '';
-  protected subtasks: SubtaskRow[] = [];
-  protected columnId = '';
+  protected readonly limits = TASK_LIMITS;
+  protected readonly today = todayIso();
 
-  private rowsChanged = false;
-  private saved = false;
+  protected readonly form = this.fb.group({
+    title: [
+      '',
+      [
+        Validators.required,
+        notBlank,
+        Validators.maxLength(TASK_LIMITS.title),
+        uniqueTitle(() => this.takenTitles()),
+      ],
+    ],
+    description: ['', Validators.maxLength(TASK_LIMITS.description)],
+    subtasks: this.fb.array<SubtaskGroup>([], uniqueSubtasks),
+    columnId: ['', Validators.required],
+    dueDate: ['', notInPast(() => this.initialValue().dueDate)],
+  });
 
-  /** Inputs (route params) are ready in ngOnInit, so fill the form here. */
+  protected get subtasks() {
+    return this.form.controls.subtasks;
+  }
+
   ngOnInit(): void {
-    const found = this.boardService.findTask(this.boardId(), this.taskId() ?? '');
-    if (found) {
-      this.title = found.task.title;
-      this.description = found.task.description;
-      this.subtasks = found.task.subtasks.map((s) => ({ key: createId(), ...s }));
-      this.columnId = found.column.id;
-    } else {
-      this.subtasks = [newRow(), newRow()];
-      this.columnId = this.statuses()[0]?.id ?? '';
-    }
+    const { title, description, subtasks, columnId, dueDate } = this.initialValue();
+    subtasks.forEach((subtask) => this.subtasks.push(this.subtaskGroup(subtask)));
+    this.form.patchValue({ title, description, columnId, dueDate });
+  }
+
+  isDirty(): boolean {
+    return this.form.dirty;
+  }
+
+  markAsSaved(saved: TaskDraft): void {
+    this.form.reset(saved);
+  }
+
+  protected errorFor(control: AbstractControl): string | null {
+    return control.invalid && (control.touched || control.dirty)
+      ? errorMessage(control.errors)
+      : null;
   }
 
   protected addSubtask(): void {
-    this.subtasks.push(newRow());
-    this.rowsChanged = true;
+    this.subtasks.push(this.subtaskGroup());
+    // FormArray changes don't mark the form dirty.
+    this.subtasks.markAsDirty();
   }
 
   protected removeSubtask(index: number): void {
-    this.subtasks.splice(index, 1);
-    this.rowsChanged = true;
+    this.subtasks.removeAt(index);
+    this.subtasks.markAsDirty();
   }
 
-  protected save(): void {
-    const form = this.form();
-    if (form.invalid) {
-      form.control.markAllAsTouched(); // Show every "Can't be empty" message.
+  protected submit(): void {
+    if (this.form.invalid) {
+      this.form.markAllAsTouched();
       return;
     }
-
-    const draft: TaskDraft = {
-      title: this.title,
-      description: this.description,
-      subtasks: this.subtasks.map(({ title, isCompleted }) => ({ title, isCompleted })),
-      columnId: this.columnId,
-    };
-    this.saved = true;
-
-    const taskId = this.taskId();
-    if (taskId) {
-      this.boardService.updateTask(this.boardId(), taskId, draft);
-      this.toast.success('Task updated');
-    } else {
-      this.boardService.createTask(this.boardId(), draft);
-      this.toast.success('Task created');
-    }
-
-    // Programmatic navigation back to the board, keeping any ?search= term.
-    this.router.navigate(['/boards', this.boardId()], { queryParamsHandling: 'preserve' });
+    this.submitted.emit(this.form.getRawValue());
   }
 
-  /** Used by the unsaved-changes guard. */
-  hasUnsavedChanges(): boolean {
-    return !this.saved && (this.form().dirty || this.rowsChanged);
+  private subtaskGroup(subtask: Subtask = { title: '', isCompleted: false }): SubtaskGroup {
+    return this.fb.group({
+      title: [
+        subtask.title,
+        [Validators.required, notBlank, Validators.maxLength(TASK_LIMITS.subtask)],
+      ],
+      isCompleted: [subtask.isCompleted],
+    });
   }
-}
-
-function newRow(): SubtaskRow {
-  return { key: createId(), title: '', isCompleted: false };
 }

@@ -30,43 +30,67 @@
 
   /* Layout */
   --header-height-mobile: 4rem;
-  --header-height: 5rem;
-  --header-height-desktop: 6rem;
+  --header-height: 4.5rem;
+  --header-height-desktop: 4.75rem;
   --sidebar-width: 16.25rem;
   --sidebar-width-desktop: 18.75rem;
-  --column-width: 17.5rem;
-  --radius-sm: 0.25rem;
-  --radius-md: 0.5rem;
+  --column-width: 18.5rem;
+  --radius-sm: 0.5rem;
+  --radius-md: 0.75rem;
+  --radius-lg: 1rem;
   --radius-pill: 6rem;
-  --shadow-card: 0 4px 6px rgb(54 78 126 / 10%);
+  --shadow-card: 0 1px 2px rgb(16 24 40 / 5%);
+  --shadow-card-hover: 0 4px 12px rgb(16 24 40 / 8%);
+  --shadow-popover: 0 12px 32px rgb(16 24 40 / 12%), 0 2px 6px rgb(16 24 40 / 6%);
   --transition: 150ms ease;
+  --color-green: #2fb383;
 
-  /* Semantic theme colors (light) */
-  --bg-app: var(--color-light-grey);
+  /*
+    Semantic theme colors (light).
+    Surfaces are neutral greys; purple is kept for actions and the active state.
+  */
+  --bg-app: #f8f9fa;
   --bg-surface: var(--color-white);
+  --bg-card: var(--color-white);
   --bg-input: var(--color-white);
-  --text-primary: var(--color-black);
-  --text-secondary: var(--color-medium-grey);
-  --border: var(--color-lines-light);
+  --text-primary: #111214;
+  --text-secondary: #6b6f76;
+  --border: #e6e7ea;
   --bg-secondary-button: rgb(99 95 199 / 10%);
-  --bg-secondary-button-hover: rgb(99 95 199 / 25%);
-  --bg-subtask: var(--color-light-grey);
-  --bg-new-column: linear-gradient(180deg, #e9effa 0%, rgb(233 239 250 / 50%) 100%);
+  --bg-secondary-button-hover: rgb(99 95 199 / 18%);
+  --bg-subtask: #f3f4f6;
+  --bg-new-column: transparent;
+  --bg-lane: #f1f2f4;
+  --bg-hover: rgb(17 18 20 / 5%);
+  --border-card: rgb(17 18 20 / 8%);
+  --bg-track: rgb(17 18 20 / 8%);
+  --bg-accent-soft: rgb(99 95 199 / 12%);
+  --text-accent: var(--color-purple);
 
   color-scheme: light;
 }
 
 :root[data-theme='dark'] {
-  --bg-app: var(--color-very-dark-grey);
-  --bg-surface: var(--color-dark-grey);
-  --bg-input: var(--color-dark-grey);
-  --text-primary: var(--color-white);
-  --text-secondary: var(--color-medium-grey);
-  --border: var(--color-lines-dark);
-  --bg-secondary-button: var(--color-white);
-  --bg-secondary-button-hover: var(--color-white);
-  --bg-subtask: var(--color-very-dark-grey);
-  --bg-new-column: linear-gradient(180deg, rgb(43 44 55 / 25%) 0%, rgb(43 44 55 / 12.5%) 100%);
+  --bg-app: #111113;
+  --bg-surface: #18181b;
+  --bg-card: #1f1f23;
+  --bg-input: #18181b;
+  --text-primary: #f4f4f5;
+  --text-secondary: #8e8e96;
+  --border: #27272b;
+  --bg-secondary-button: rgb(255 255 255 / 7%);
+  --bg-secondary-button-hover: rgb(255 255 255 / 12%);
+  --bg-subtask: #111113;
+  --bg-new-column: transparent;
+  --bg-lane: #161618;
+  --bg-hover: rgb(255 255 255 / 6%);
+  --border-card: rgb(255 255 255 / 7%);
+  --bg-track: rgb(255 255 255 / 10%);
+  --bg-accent-soft: rgb(99 95 199 / 25%);
+  --text-accent: var(--color-purple-hover);
+  --shadow-card: 0 1px 2px rgb(0 0 0 / 30%);
+  --shadow-card-hover: 0 6px 16px rgb(0 0 0 / 40%);
+  --shadow-popover: 0 12px 32px rgb(0 0 0 / 50%), 0 0 0 1px rgb(255 255 255 / 6%);
 
   color-scheme: dark;
 }
@@ -202,20 +226,21 @@ fieldset {
   gap: 0.25rem;
   height: 2.5rem;
   padding: 0 1rem;
-  border-radius: var(--radius-pill);
+  border-radius: var(--radius-sm);
   font-size: 0.8125rem;
   font-weight: var(--font-bold);
   line-height: 1.4375rem;
   white-space: nowrap;
   transition:
     background-color var(--transition),
+    box-shadow var(--transition),
     opacity var(--transition);
 }
 
 .btn-lg {
-  height: 3rem;
-  padding: 0 1.5rem;
-  font-size: 0.9375rem;
+  height: 2.75rem;
+  padding: 0 1.25rem;
+  font-size: 0.875rem;
 }
 
 .btn-primary {
@@ -224,12 +249,12 @@ fieldset {
 }
 
 .btn-primary:hover {
-  background-color: var(--color-purple-hover);
+  background-color: #7470d6;
 }
 
 .btn-secondary {
   background-color: var(--bg-secondary-button);
-  color: var(--color-purple);
+  color: var(--text-accent);
 }
 
 .btn-secondary:hover {
@@ -258,12 +283,12 @@ fieldset {
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  width: calc(100% - 1.5rem);
-  height: 3rem;
-  padding-left: 1.5rem;
-  border-radius: 0 var(--radius-pill) var(--radius-pill) 0;
-  font-size: 0.9375rem;
-  font-weight: var(--font-bold);
+  height: 2.5rem;
+  margin: 0 0.75rem 0.125rem;
+  padding: 0 0.875rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.875rem;
+  font-weight: var(--font-medium);
   color: var(--text-secondary);
   text-align: left;
   transition:
@@ -272,13 +297,14 @@ fieldset {
 }
 
 .nav-item:hover {
-  background-color: var(--bg-secondary-button);
-  color: var(--color-purple);
+  background-color: var(--bg-hover);
+  color: var(--text-primary);
 }
 
 .nav-item.active {
   background-color: var(--color-purple);
   color: var(--color-white);
+  font-weight: 600;
 }
 
 .nav-item .icon {
@@ -288,7 +314,8 @@ fieldset {
 
 @media (min-width: 1200px) {
   .nav-item {
-    padding-left: 2rem;
+    margin-inline: 1rem;
+    padding-inline: 1rem;
   }
 }
 
@@ -298,21 +325,30 @@ fieldset {
 .menu-item {
   display: block;
   width: 100%;
+  padding: 0.5rem 0.625rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.8125rem;
+  line-height: 1.25rem;
   text-align: left;
-  color: var(--text-secondary);
-  transition: color var(--transition);
+  color: var(--text-primary);
+  transition:
+    background-color var(--transition),
+    color var(--transition);
 }
 
-.menu-item:hover {
-  color: var(--text-primary);
+.menu-item:hover,
+.menu-item:focus-visible {
+  background-color: var(--bg-hover);
+  outline: none;
 }
 
 .menu-item.danger {
   color: var(--color-red);
 }
 
-.menu-item.danger:hover {
-  color: var(--color-red-hover);
+.menu-item.danger:hover,
+.menu-item.danger:focus-visible {
+  background-color: rgb(234 85 85 / 10%);
 }
 
 /* ==========================================================================
@@ -332,10 +368,12 @@ fieldset {
   height: 2.5rem;
   padding: 0 1rem;
   border: 1px solid rgb(130 143 163 / 25%);
-  border-radius: 0.25rem;
+  border-radius: var(--radius-sm);
   background-color: var(--bg-input);
   font-size: 0.8125rem;
-  transition: border-color var(--transition);
+  transition:
+    border-color var(--transition),
+    box-shadow var(--transition);
 }
 
 .input::placeholder {
@@ -351,6 +389,11 @@ fieldset {
   outline: none;
 }
 
+.input:focus,
+.select:focus {
+  box-shadow: 0 0 0 3px rgb(99 95 199 / 15%);
+}
+
 textarea.input {
   height: 7rem;
   padding: 0.5rem 1rem;
@@ -359,7 +402,8 @@ textarea.input {
 }
 
 /* Angular adds ng-invalid / ng-touched to form controls automatically. */
-.input.ng-invalid.ng-touched {
+.input.ng-invalid.ng-touched,
+.input[aria-invalid='true'] {
   border-color: var(--color-red);
   padding-right: 7.5rem;
 }
@@ -380,6 +424,34 @@ textarea.input {
   pointer-events: none;
 }
 
+/* Textareas and date inputs: the message goes below the field instead of inside it. */
+.control-stacked .input.input {
+  padding-right: 1rem;
+}
+
+.control-stacked .error {
+  position: static;
+  translate: none;
+}
+
+.control-footer {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 0.375rem;
+}
+
+.control-footer .counter {
+  margin-left: auto;
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+}
+
+.control-stacked > .error {
+  display: block;
+  margin-top: 0.375rem;
+}
+
 /* Layout for the forms inside modals. */
 .form {
   display: grid;
@@ -389,6 +461,12 @@ textarea.input {
 .form-rows {
   display: grid;
   gap: 0.75rem;
+}
+
+/* A message for the whole list of rows, e.g. duplicate subtasks. */
+.form-rows > .error {
+  font-size: 0.8125rem;
+  color: var(--color-red);
 }
 
 .form-row {
@@ -419,6 +497,21 @@ textarea.input {
   width: 100%;
 }
 
+/* Native date picker: same height as other inputs, purple calendar icon on hover. */
+input[type='date'].input {
+  cursor: text;
+}
+
+input[type='date'].input::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+  opacity: 0.6;
+  transition: opacity var(--transition);
+}
+
+input[type='date'].input::-webkit-calendar-picker-indicator:hover {
+  opacity: 1;
+}
+
 .select {
   appearance: none;
   cursor: pointer;
@@ -428,12 +521,61 @@ textarea.input {
   background-size: 0.625rem;
 }
 
+/* Browsers that support customizable selects get a dropdown list matching the menus.
+   Others keep their native list, which is fine. */
+@supports (appearance: base-select) {
+  .select,
+  .select::picker(select) {
+    appearance: base-select;
+  }
+
+  .select {
+    display: flex;
+    align-items: center;
+  }
+
+  .select::picker-icon {
+    display: none; /* The chevron is already the background image. */
+  }
+
+  .select::picker(select) {
+    margin-top: 0.375rem;
+    padding: 0.375rem;
+    border: 1px solid var(--border-card);
+    border-radius: var(--radius-md);
+    background-color: var(--bg-surface);
+    box-shadow: var(--shadow-popover);
+  }
+
+  .select option {
+    padding: 0.5rem 0.625rem;
+    border-radius: var(--radius-sm);
+    font-size: 0.8125rem;
+  }
+
+  .select option:hover,
+  .select option:focus-visible {
+    background-color: var(--bg-hover);
+    outline: none;
+  }
+
+  .select option:checked {
+    color: var(--text-accent);
+    font-weight: var(--font-bold);
+  }
+
+  .select option::checkmark {
+    order: 1;
+    margin-left: auto;
+  }
+}
+
 /* ==========================================================================
    Drag and drop (Angular CDK). The preview is attached to <body>, so it is styled globally.
    ========================================================================== */
 .cdk-drag-preview {
   border-radius: var(--radius-md);
-  box-shadow: 0 12px 24px rgb(54 78 126 / 30%);
+  box-shadow: 0 16px 32px rgb(54 78 126 / 25%);
   rotate: 2deg;
   cursor: grabbing;
 }

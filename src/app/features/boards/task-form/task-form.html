@@ -1,84 +1,117 @@
-<app-modal labelledBy="task-form-title">
-  <h2 id="task-form-title" class="heading-l">{{ isEdit() ? 'Edit Task' : 'Add New Task' }}</h2>
-
-  <form class="form" novalidate (ngSubmit)="save()">
-    <div>
-      <label class="label" for="task-title">Title</label>
-      <div class="control">
-        <input
-          #titleModel="ngModel"
-          id="task-title"
-          name="title"
-          class="input"
-          placeholder="e.g. Take coffee break"
-          required
-          pattern=".*\S.*"
-          [(ngModel)]="title"
-        />
-        @if (titleModel.invalid && titleModel.touched) {
-          <span class="error">Can't be empty</span>
-        }
-      </div>
+<form class="form" novalidate [formGroup]="form" (ngSubmit)="submit()">
+  <div>
+    <label class="label" for="task-title">Title</label>
+    @let titleError = errorFor(form.controls.title);
+    <div class="control">
+      <input
+        id="task-title"
+        class="input"
+        placeholder="e.g. Take coffee break"
+        formControlName="title"
+        aria-required="true"
+        [attr.aria-invalid]="!!titleError"
+        [attr.aria-describedby]="titleError ? 'task-title-error' : null"
+      />
+      @if (titleError) {
+        <span id="task-title-error" class="error">{{ titleError }}</span>
+      }
     </div>
+  </div>
 
-    <div>
-      <label class="label" for="task-description">Description</label>
+  <div>
+    <label class="label" for="task-description">Description</label>
+    @let descriptionError = errorFor(form.controls.description);
+    <div class="control control-stacked">
       <textarea
         id="task-description"
-        name="description"
         class="input"
         placeholder="e.g. It's always good to take a break. This 15 minute break will recharge the batteries a little."
-        [(ngModel)]="description"
+        formControlName="description"
+        [attr.aria-invalid]="!!descriptionError"
+        [attr.aria-describedby]="
+          descriptionError
+            ? 'task-description-error task-description-count'
+            : 'task-description-count'
+        "
       ></textarea>
-    </div>
-
-    <fieldset class="form-rows">
-      <legend class="label">Subtasks</legend>
-
-      @for (subtask of subtasks; track subtask.key; let i = $index) {
-        <div class="form-row">
-          <div class="control">
-            <input
-              #subtaskModel="ngModel"
-              class="input"
-              [name]="'subtask-' + subtask.key"
-              [attr.aria-label]="'Subtask ' + (i + 1)"
-              [placeholder]="i === 0 ? 'e.g. Make coffee' : 'e.g. Drink coffee & smile'"
-              required
-              pattern=".*\S.*"
-              [(ngModel)]="subtask.title"
-            />
-            @if (subtaskModel.invalid && subtaskModel.touched) {
-              <span class="error">Can't be empty</span>
-            }
-          </div>
-          <button
-            type="button"
-            class="remove-row"
-            [attr.aria-label]="'Remove subtask ' + (i + 1)"
-            (click)="removeSubtask(i)"
-          >
-            <app-icon name="cross" />
-          </button>
-        </div>
-      }
-
-      <button type="button" class="btn btn-secondary btn-block" (click)="addSubtask()">
-        + Add New Subtask
-      </button>
-    </fieldset>
-
-    <div>
-      <label class="label" for="task-status">Status</label>
-      <select id="task-status" name="status" class="select" required [(ngModel)]="columnId">
-        @for (column of statuses(); track column.id) {
-          <option [value]="column.id">{{ column.name }}</option>
+      <div class="control-footer">
+        @if (descriptionError) {
+          <span id="task-description-error" class="error">{{ descriptionError }}</span>
         }
-      </select>
+        <span id="task-description-count" class="counter">
+          {{ form.controls.description.value.length }}/{{ limits.description }}
+        </span>
+      </div>
     </div>
+  </div>
 
-    <button type="submit" class="btn btn-primary btn-block">
-      {{ isEdit() ? 'Save Changes' : 'Create Task' }}
+  <fieldset class="form-rows" formArrayName="subtasks">
+    <legend class="label">Subtasks</legend>
+
+    @for (subtask of subtasks.controls; track subtask; let i = $index) {
+      @let rowError = errorFor(subtask.controls.title);
+      <div class="form-row" [formGroupName]="i">
+        <div class="control">
+          <input
+            class="input"
+            [attr.aria-label]="'Subtask ' + (i + 1)"
+            [placeholder]="i === 0 ? 'e.g. Make coffee' : 'e.g. Drink coffee & smile'"
+            formControlName="title"
+            aria-required="true"
+            [attr.aria-invalid]="!!rowError"
+            [attr.aria-describedby]="rowError ? 'subtask-error-' + i : null"
+          />
+          @if (rowError) {
+            <span [id]="'subtask-error-' + i" class="error">{{ rowError }}</span>
+          }
+        </div>
+        <button
+          type="button"
+          class="remove-row"
+          [attr.aria-label]="'Remove subtask ' + (i + 1)"
+          (click)="removeSubtask(i)"
+        >
+          <app-icon name="cross" />
+        </button>
+      </div>
+    }
+
+    @if (subtasks.hasError('duplicateSubtasks') && subtasks.touched) {
+      <p class="error" role="alert">Subtasks must be different</p>
+    }
+
+    <button type="button" class="btn btn-secondary btn-block" (click)="addSubtask()">
+      + Add New Subtask
     </button>
-  </form>
-</app-modal>
+  </fieldset>
+
+  <div>
+    <label class="label" for="task-status">Status</label>
+    <select id="task-status" class="select" formControlName="columnId" aria-required="true">
+      @for (column of statuses(); track column.id) {
+        <option [value]="column.id">{{ column.name }}</option>
+      }
+    </select>
+  </div>
+
+  <div>
+    <label class="label" for="task-due-date">Due Date (optional)</label>
+    @let dueDateError = errorFor(form.controls.dueDate);
+    <div class="control control-stacked">
+      <input
+        id="task-due-date"
+        type="date"
+        class="input"
+        formControlName="dueDate"
+        [min]="today"
+        [attr.aria-invalid]="!!dueDateError"
+        [attr.aria-describedby]="dueDateError ? 'task-due-date-error' : null"
+      />
+      @if (dueDateError) {
+        <span id="task-due-date-error" class="error">{{ dueDateError }}</span>
+      }
+    </div>
+  </div>
+
+  <button type="submit" class="btn btn-primary btn-block">{{ submitLabel() }}</button>
+</form>

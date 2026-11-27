@@ -15,9 +15,10 @@ export interface TaskDrop {
   selector: 'app-board-column',
   imports: [TaskCard, CdkDropList, CdkDrag, CdkDragPlaceholder],
   template: `
-    <h2 class="heading-s header">
+    <h2 class="header">
       <span class="dot" [style.background-color]="dotColor()"></span>
-      {{ column().name }} ({{ column().tasks.length }})
+      <span class="name">{{ column().name }}</span>
+      <span class="count">{{ column().tasks.length }}</span>
     </h2>
 
     <!--
@@ -43,30 +44,59 @@ export interface TaskDrop {
     </ul>
   `,
   styles: `
+    /* Each column is a soft "lane" that holds its cards. */
     :host {
       display: flex;
       flex-direction: column;
-      gap: 1.5rem;
+      gap: 0.75rem;
       width: var(--column-width);
       flex-shrink: 0;
+      padding: 0.75rem;
+      border: 1px solid var(--border-card);
+      border-radius: var(--radius-lg);
+      background-color: var(--bg-lane);
     }
 
     .header {
       display: flex;
       align-items: center;
-      gap: 0.75rem;
+      gap: 0.5rem;
+      padding: 0.25rem 0.25rem 0;
+      font-size: 0.75rem;
+      font-weight: var(--font-bold);
+      letter-spacing: 0.08rem;
+      text-transform: uppercase;
     }
 
     .dot {
-      width: 0.9375rem;
-      height: 0.9375rem;
+      width: 0.5rem;
+      height: 0.5rem;
       border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .name {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .count {
+      min-width: 1.375rem;
+      padding: 0 0.4375rem;
+      border-radius: var(--radius-pill);
+      background-color: var(--bg-hover);
+      color: var(--text-secondary);
+      font-size: 0.6875rem;
+      line-height: 1.25rem;
+      letter-spacing: 0;
+      text-align: center;
     }
 
     .tasks {
       display: flex;
       flex-direction: column;
-      gap: 1.25rem;
+      gap: 0.5rem;
       flex: 1;
       min-height: 6rem;
     }
@@ -75,7 +105,7 @@ export interface TaskDrop {
     .tasks.is-empty::before {
       content: '';
       height: 6rem;
-      border: 2px dashed var(--border);
+      border: 1.5px dashed var(--border-card);
       border-radius: var(--radius-md);
     }
 
@@ -85,8 +115,8 @@ export interface TaskDrop {
     }
 
     .placeholder {
-      min-height: 5.5rem;
-      border: 2px dashed var(--color-purple);
+      min-height: 4.5rem;
+      border: 1.5px dashed var(--color-purple);
       border-radius: var(--radius-md);
       background-color: var(--bg-secondary-button);
     }

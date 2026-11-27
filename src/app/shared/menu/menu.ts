@@ -41,28 +41,48 @@ import { Icon } from '../icon/icon';
     .toggle {
       display: grid;
       place-items: center;
-      width: 1.5rem;
-      height: 2.5rem;
+      width: 2.25rem;
+      height: 2.25rem;
+      border-radius: var(--radius-sm);
       color: var(--text-secondary);
+      transition:
+        background-color var(--transition),
+        color var(--transition);
+    }
+
+    .toggle:hover,
+    .toggle[aria-expanded='true'] {
+      background-color: var(--bg-hover);
+      color: var(--text-primary);
     }
 
     .toggle app-icon {
-      width: 0.3125rem;
-      height: 1.25rem;
+      width: 0.25rem;
+      height: 1rem;
     }
 
     .menu {
       position: absolute;
-      top: calc(100% + 1rem);
+      top: calc(100% + 0.375rem);
       right: 0;
       z-index: 20;
       display: grid;
-      gap: 1rem;
+      gap: 0.125rem;
       width: 12rem;
-      padding: 1rem;
+      padding: 0.375rem;
+      border: 1px solid var(--border-card);
       border-radius: var(--radius-md);
-      background-color: var(--bg-app);
-      box-shadow: 0 10px 20px rgb(54 78 126 / 25%);
+      background-color: var(--bg-surface);
+      box-shadow: var(--shadow-popover);
+      transform-origin: top right;
+      animation: menu-in 120ms ease-out;
+    }
+
+    @keyframes menu-in {
+      from {
+        opacity: 0;
+        transform: scale(0.96) translateY(-4px);
+      }
     }
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,

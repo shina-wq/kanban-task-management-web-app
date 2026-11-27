@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, computed, input } from '@angular/co
 
 export type IconName =
   | 'board'
+  | 'calendar'
   | 'check'
   | 'chevron-down'
   | 'chevron-up'

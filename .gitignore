@@ -45,3 +45,6 @@ Thumbs.db
 
 # Claude Code local config
 /.claude/
+
+# Local planning notes
+/PLAN.md

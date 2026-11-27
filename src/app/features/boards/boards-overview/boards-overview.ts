@@ -36,13 +36,17 @@ import { BoardCard } from '../board-card/board-card';
       place-items: center;
       height: 100%;
       min-height: 10rem;
+      border: 1.5px dashed var(--border-card);
       border-radius: var(--radius-md);
       background: var(--bg-new-column);
       color: var(--text-secondary);
-      transition: color var(--transition);
+      transition:
+        color var(--transition),
+        border-color var(--transition);
     }
 
     .new-board:hover {
+      border-color: var(--color-purple);
       color: var(--color-purple);
     }
 

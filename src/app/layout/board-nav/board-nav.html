@@ -24,10 +24,10 @@
       </a>
     </li>
   }
-  <li>
-    <a class="nav-item create" routerLink="/boards/new" (click)="navigate.emit()">
-      <app-icon name="board" />
-      + Create New Board
+  <li class="create-row">
+    <a class="btn btn-secondary create" routerLink="/boards/new" (click)="navigate.emit()">
+      <app-icon name="plus" />
+      Create New Board
     </a>
   </li>
   <li>

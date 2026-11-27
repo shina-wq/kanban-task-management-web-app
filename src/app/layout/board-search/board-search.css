@@ -15,7 +15,7 @@
   height: var(--size);
   overflow: hidden;
   border: 1px solid transparent;
-  border-radius: var(--radius-pill);
+  border-radius: var(--radius-sm);
   background-color: var(--bg-secondary-button);
   color: var(--color-purple);
   transition:
@@ -93,7 +93,7 @@
 
 @media (min-width: 768px) {
   :host {
-    --size: 3rem;
+    --size: 2.5rem;
   }
 
   .search-button app-icon {

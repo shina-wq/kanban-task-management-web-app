@@ -1,11 +1,12 @@
 import { Routes } from '@angular/router';
 import { unsavedChangesGuard } from '../../core/guards/unsaved-changes.guard';
+import { AddTask } from './add-task/add-task';
 import { BoardDetail } from './board-detail/board-detail';
 import { BoardForm } from './board-form/board-form';
 import { BoardsOverview } from './boards-overview/boards-overview';
-import { boardExistsGuard, taskExistsGuard } from './boards.guards';
+import { boardExistsGuard, boardHasColumnsGuard, taskExistsGuard } from './boards.guards';
 import { DeleteConfirm } from './delete-confirm/delete-confirm';
-import { TaskForm } from './task-form/task-form';
+import { EditTask } from './edit-task/edit-task';
 import { TaskView } from './task-view/task-view';
 
 export default [
@@ -39,8 +40,9 @@ export default [
       { path: 'delete', component: DeleteConfirm, title: 'Delete Board' },
       {
         path: 'tasks/new',
-        component: TaskForm,
+        component: AddTask,
         title: 'Add New Task',
+        canActivate: [boardHasColumnsGuard],
         canDeactivate: [unsavedChangesGuard],
       },
       {
@@ -50,7 +52,7 @@ export default [
           { path: '', component: TaskView, title: 'Task' },
           {
             path: 'edit',
-            component: TaskForm,
+            component: EditTask,
             title: 'Edit Task',
             canDeactivate: [unsavedChangesGuard],
           },

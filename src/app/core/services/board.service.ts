@@ -1,16 +1,44 @@
 import { Injectable, signal } from '@angular/core';
 import seedData from '../data/seed-data.json';
 import { Board, BoardDraft, Task, TaskDraft, TaskLocation } from '../models/board.model';
+import { isoDate } from '../utils/dates';
 import { createId, createSlug } from '../utils/id';
 import { readJson, removeItem, writeJson } from '../utils/storage';
 
+/** A change that can't be made, e.g. the task was deleted meanwhile. The message is for the user. */
+export class BoardError extends Error {
+  override readonly name = 'BoardError';
+}
+
+/** A message to show the user for an error thrown while saving. */
+export function saveErrorMessage(error: unknown): string {
+  return error instanceof BoardError ? error.message : 'Something went wrong. Please try again.';
+}
+
 const STORAGE_KEY = 'kanban.boards';
-const SEED_BOARDS: Board[] = seedData.boards;
+
+/**
+ * The sample boards. Due dates are stored as days from today ("dueInDays": -2) and turned
+ * into real dates here, so the samples always show a mix of overdue, today and upcoming.
+ */
+function sampleBoards(): Board[] {
+  return seedData.boards.map((board) => ({
+    ...board,
+    columns: board.columns.map((column) => ({
+      ...column,
+      tasks: column.tasks.map(({ dueInDays, subtasks, ...task }) => ({
+        ...task,
+        subtasks: subtasks.map((subtask) => ({ ...subtask })),
+        dueDate: isoDate(dueInDays),
+      })),
+    })),
+  }));
+}
 
 // Single source of truth for boards, columns and tasks.
 @Injectable({ providedIn: 'root' })
 export class BoardService {
-  private readonly state = signal<Board[]>(readJson(STORAGE_KEY, structuredClone(SEED_BOARDS)));
+  private readonly state = signal<Board[]>(readJson(STORAGE_KEY, sampleBoards()));
 
   readonly boards = this.state.asReadonly();
 
@@ -22,6 +50,14 @@ export class BoardService {
 
   findTask(boardId: string, taskId: string): TaskLocation | undefined {
     return this.locate(this.state(), boardId, taskId);
+  }
+
+  /** Titles of every task on a board, except `exceptTaskId` (the task being edited). */
+  taskTitles(boardId: string, exceptTaskId?: string): string[] {
+    return (this.getBoard(boardId)?.columns ?? [])
+      .flatMap((column) => column.tasks)
+      .filter((task) => task.id !== exceptTaskId)
+      .map((task) => task.title);
   }
 
   // Boards
@@ -63,22 +99,35 @@ export class BoardService {
 
   // Tasks
 
+  /** Adds a task to the chosen column. Throws a BoardError if that column no longer exists. */
   createTask(boardId: string, draft: TaskDraft): Task {
+    this.assertColumnExists(boardId, draft.columnId);
+
     const task: Task = { id: createId(), ...this.cleanTask(draft) };
-    this.update((boards) => {
-      const column = this.columnIn(boards, boardId, draft.columnId);
-      column?.tasks.push(task);
-    });
+    this.update((boards) => this.columnIn(boards, boardId, draft.columnId)?.tasks.push(task));
     return task;
   }
 
-  /** Saves the task's fields and moves it if its status (column) changed. */
+  /**
+   * Saves the task's fields. If its status (column) changed, moves it to the end of the
+   * new column; otherwise it keeps its place. Throws a BoardError if the task or the
+   * chosen column no longer exists — checked first, so a failed save changes nothing.
+   */
   updateTask(boardId: string, taskId: string, draft: TaskDraft): void {
+    if (!this.findTask(boardId, taskId)) {
+      throw new BoardError('This task no longer exists.');
+    }
+    this.assertColumnExists(boardId, draft.columnId);
+
     this.update((boards) => {
-      const task = this.removeTask(boards, boardId, taskId);
-      if (!task) return;
-      Object.assign(task, this.cleanTask(draft));
-      this.columnIn(boards, boardId, draft.columnId)?.tasks.push(task);
+      const found = this.locate(boards, boardId, taskId);
+      if (!found) return;
+      Object.assign(found.task, this.cleanTask(draft));
+
+      if (found.column.id !== draft.columnId) {
+        this.removeTask(boards, boardId, taskId);
+        this.columnIn(boards, boardId, draft.columnId)?.tasks.push(found.task);
+      }
     });
   }
 
@@ -107,7 +156,7 @@ export class BoardService {
   /** Restores the sample boards. */
   reset(): void {
     removeItem(STORAGE_KEY);
-    this.state.set(structuredClone(SEED_BOARDS));
+    this.state.set(sampleBoards());
   }
 
   // Helpers
@@ -117,6 +166,12 @@ export class BoardService {
     change(next);
     this.state.set(next);
     writeJson(STORAGE_KEY, next);
+  }
+
+  private assertColumnExists(boardId: string, columnId: string): void {
+    if (!this.columnIn(this.state(), boardId, columnId)) {
+      throw new BoardError('That status no longer exists. Pick another one.');
+    }
   }
 
   private columnIn(boards: Board[], boardId: string, columnId: string) {
@@ -144,6 +199,8 @@ export class BoardService {
       title: draft.title.trim(),
       description: draft.description.trim(),
       subtasks: draft.subtasks.map((s) => ({ title: s.title.trim(), isCompleted: s.isCompleted })),
+      // undefined (not "") so clearing the date on edit removes it from the task.
+      dueDate: draft.dueDate || undefined,
     };
   }
 }

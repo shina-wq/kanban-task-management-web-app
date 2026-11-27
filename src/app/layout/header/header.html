@@ -6,7 +6,12 @@
 <div class="bar">
   <!-- Title. On mobile it also opens the board dropdown. -->
   <div class="title-wrap" (appClickOutside)="mobileNavOpen.set(false)">
-    <h1 class="title">{{ title() }}</h1>
+    <div class="titles">
+      <h1 class="title">{{ title() }}</h1>
+      @if (summary(); as summary) {
+        <p class="subtitle">{{ summary }}</p>
+      }
+    </div>
 
     <button
       type="button"
@@ -43,7 +48,9 @@
       <a
         class="btn btn-primary btn-lg add-task"
         [routerLink]="['/boards', board.id, 'tasks', 'new']"
+        queryParamsHandling="preserve"
         [attr.aria-disabled]="board.columns.length === 0"
+        [attr.tabindex]="board.columns.length === 0 ? -1 : null"
         aria-label="Add new task"
       >
         <app-icon name="plus" />

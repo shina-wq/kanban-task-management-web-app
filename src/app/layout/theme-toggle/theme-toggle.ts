@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { ThemeService } from '../../core/services/theme.service';
 import { Icon } from '../../shared/icon/icon';
 
@@ -67,5 +68,6 @@ import { Icon } from '../../shared/icon/icon';
 })
 export class ThemeToggle {
   protected readonly theme = inject(ThemeService);
-  protected readonly isDark = computed(() => this.theme.theme() === 'dark');
+  private readonly current = toSignal(this.theme.theme$, { requireSync: true });
+  protected readonly isDark = computed(() => this.current() === 'dark');
 }

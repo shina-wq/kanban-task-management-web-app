@@ -53,6 +53,18 @@ Then open http://localhost:4200.
 - **Guards** protect unsaved forms (`CanDeactivate`) and redirect missing boards and tasks to a Not Found page.
 - **State** lives in a single `BoardService`: a signal of all boards, saved to `localStorage`.
 
+## State management
+
+State is any data the UI depends on. The question is who needs it: one element, one component, or the whole app.
+
+| Kind      | Lives in                      | Examples in this app                                                         |
+| --------- | ----------------------------- | ---------------------------------------------------------------------------- |
+| Local     | A form control or template    | Values typed into the task, board, login and settings forms                  |
+| Component | A signal inside one component | Search box expanded (`BoardSearch`), menu open (`Menu`), mobile nav (`Header`) |
+| Global    | A root service or store       | Boards, columns and tasks; theme; logged-in user; toast message              |
+
+Local and component state disappears with the component, and that's fine: no one else needs it. Global state is shared: when a board is renamed, the sidebar, the header and the board page must all agree. Keeping it in one place gives a single source of truth, one way to change it, and changes that are easy to trace.
+
 ## Project structure
 
 ```

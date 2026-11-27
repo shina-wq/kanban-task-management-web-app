@@ -15,17 +15,15 @@ Design by [Frontend Mentor](https://www.frontendmentor.io/challenges/kanban-task
 - Light and dark themes, responsive from phone to desktop
 - No backend: data is saved in your browser, with sample boards to start
 
-```
 Log in with any name. There's no password, and nothing leaves your browser.
-```
 
 ## Getting started
 
 Requires [Node.js](https://nodejs.org) 22.22+ or 24.15+.
 
 ```bash
-git clone https://github.com/shina-wq/kanban-task-management-web-app-v2.git
-cd kanban-task-management-web-app-v2
+git clone https://github.com/shina-wq/kanban-task-management-web-app.git
+cd kanban-task-management-web-app
 npm install
 npm start
 ```
@@ -40,6 +38,8 @@ Then open http://localhost:4200.
 ## Tech stack
 
 - **[Angular 22](https://angular.dev):** standalone components, signals, OnPush change detection
+- **[NgRx](https://ngrx.io):** store, effects and selectors for boards and tasks
+- **RxJS:** a `BehaviorSubject` service for the theme
 - **Angular Forms:** typed reactive forms with custom validators for tasks, template-driven forms elsewhere
 - **Angular Router:** lazy loading, guards, and route params bound as component inputs
 - **Angular CDK:** drag and drop
@@ -48,32 +48,28 @@ Then open http://localhost:4200.
 ## How it works
 
 - **Every view has a URL.** Boards, tasks and modals are routes (e.g. `/boards/:boardId/tasks/:taskId/edit`), so links, refresh and the Back button all work.
-- **One task form for add and edit.** `AddTask` and `EditTask` pass starting values to a shared `TaskForm`, which validates the input and emits the result for the parent to save.
-- **Validation** covers required fields, length limits, unique task titles per board, duplicate subtasks, and past or half-typed due dates. Errors are announced to screen readers.
-- **Guards** protect unsaved forms (`CanDeactivate`) and redirect missing boards and tasks to a Not Found page.
-- **State** lives in a single `BoardService`: a signal of all boards, saved to `localStorage`.
-
-## State management
-
-State is any data the UI depends on. The question is who needs it: one element, one component, or the whole app.
-
-| Kind      | Lives in                      | Examples in this app                                                         |
-| --------- | ----------------------------- | ---------------------------------------------------------------------------- |
-| Local     | A form control or template    | Values typed into the task, board, login and settings forms                  |
-| Component | A signal inside one component | Search box expanded (`BoardSearch`), menu open (`Menu`), mobile nav (`Header`) |
-| Global    | A root service or store       | Boards, columns and tasks; theme; logged-in user; toast message              |
-
-Local and component state disappears with the component, and that's fine: no one else needs it. Global state is shared: when a board is renamed, the sidebar, the header and the board page must all agree. Keeping it in one place gives a single source of truth, one way to change it, and changes that are easy to trace.
+- **One task form for add and edit.** `AddTask` and `EditTask` share a `TaskForm` that validates the input and emits the result.
+- **Guards** protect unsaved forms and redirect missing boards and tasks to a Not Found page.
+- **Boards and tasks live in an NgRx store.** Components call `BoardService`, which dispatches actions; effects load boards at startup and save them to `localStorage` after each change. Open [Redux DevTools](https://github.com/reduxjs/redux-devtools) to watch every action.
+- **The theme lives in a service.** `ThemeService` holds it in a `BehaviorSubject`: one value, so no store needed.
 
 ## Project structure
 
 ```
 src/app/
-├── core/       # Models, services, guards, validators
+├── core/       # Models, services, NgRx store, utils, validators
 ├── shared/     # Reusable UI: modal, menu, icon, due date
 ├── layout/     # Header, sidebar, search, toasts
 └── features/   # Login, boards and tasks, settings, not found
 ```
+
+## Branches
+
+| Branch                    | Adds                                                                |
+| ------------------------- | ------------------------------------------------------------------- |
+| `main`                    | The app: components, routing, guards, drag and drop, forms          |
+| `lab-13-forms`            | Reactive task form, custom validators, due dates                    |
+| `lab-16-state-management` | NgRx store (actions, reducer, effects, selectors), RxJS theme state |
 
 ## Deployment
 
